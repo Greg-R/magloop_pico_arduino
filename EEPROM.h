@@ -24,8 +24,8 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
-#include <hardware/flash.h>
-#include <hardware/sync.h>
+//#include <hardware/flash.h>
+//#include <hardware/sync.h>
 
 class EEPROMClass {
 public:

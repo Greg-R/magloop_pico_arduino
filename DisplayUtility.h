@@ -52,7 +52,7 @@ class DisplayUtility
 {
 
 public:
-    Adafruit_ILI9341 &tft;
+    Adafruit_ILI9341& tft;
     DDS &dds;
     SWR &swr;
     Data &data;

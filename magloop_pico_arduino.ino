@@ -89,7 +89,7 @@ int main()
   uart_set_format(uart1, 8, 1, UART_PARITY_NONE);
   // uart_set_fifo_enabled(uart1, true);
 
-  int currentFrequency;
+//  int currentFrequency;
   int bypassTest = 5;  // Set to arbitrary value other than 0 or 10.
 
   //  The data object manages constants and variables involved with frequencies, stepper motor positions,
@@ -215,7 +215,7 @@ int main()
     // tuneInputs.SelectParameter();
     //  testArray.EncoderTest();
     // testArray.UserNumericInput2(enterbutton, exitbutton, 7000000);
-    int i, submenuIndex;
+////    int i, submenuIndex;
     //  Refresh display:
     display.ShowMainDisplay(display.menuIndex); //  This function erases the entire display.
     display.ShowSubmenuData(display.minSWR, data.workingData.currentFrequency);

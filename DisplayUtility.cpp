@@ -32,9 +32,13 @@
 
 #include "DisplayUtility.h"
 
-DisplayUtility::DisplayUtility(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr, Data &data, TmcStepper &tmcstepper) : tft(tft), dds(dds), swr(swr),
-                               data(data), tmcstepper(tmcstepper), menuEncoder(20, 18), frequencyEncoder(21, 17)
+DisplayUtility::DisplayUtility(Adafruit_ILI9341& tft, DDS &dds, SWR &swr, Data &data, TmcStepper &tmcstepper): tft(tft), dds(dds), swr(swr), data(data), tmcstepper(tmcstepper), menuEncoder(20, 18), frequencyEncoder(21, 17)
 {
+//  tft(tft);
+//  dds = dds;
+//  swr = swr;
+//  data = data;
+//  tmcstepper = tmcstepper;
   startUpFlag = false;
   calFlag = false;
   menuEncoder = Rotary(20, 18); // Swap if encoder works in wrong direction.

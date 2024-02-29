@@ -108,14 +108,14 @@ bool EEPROMClass::commit() {
 
     //noInterrupts();
     //rp2040.idleOtherCore();
-    uint32_t ints = save_and_disable_interrupts();
+//    uint32_t ints = save_and_disable_interrupts();
 //    flash_range_erase((intptr_t)_sector - (intptr_t)XIP_BASE, 4096);
 //    flash_range_program((intptr_t)_sector - (intptr_t)XIP_BASE, _data, _size);
-   flash_range_erase(FLASH_TARGET_OFFSET, 4096);
-   flash_range_program(FLASH_TARGET_OFFSET, _data, _size);
+//   flash_range_erase(FLASH_TARGET_OFFSET, 4096);
+//   flash_range_program(FLASH_TARGET_OFFSET, _data, _size);
     //rp2040.resumeOtherCore();
     //interrupts();
-    restore_interrupts(ints);
+//    restore_interrupts(ints);
     return true;
 }
 

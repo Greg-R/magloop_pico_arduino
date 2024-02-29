@@ -29,7 +29,7 @@
 */
 
 #pragma once
-//#include <stdint.h>
+#include <stdint.h>
 #include <string>
 #include <vector>
 
@@ -102,12 +102,12 @@ const std::string releaseDate = "8-30-23";
 
   // GPIO assignments.
   //  Buttons
-  uint enterButton = 6;
-  uint autotuneButton = 7;
-  uint exitButton = 9;
+  int enterButton = 6;
+  int autotuneButton = 7;
+  int exitButton = 9;
   // Zero and Maximum switches.
-  uint zeroswitch = 10;
-  uint maxswitch = 11;
+  int zeroswitch = 10;
+  int maxswitch = 11;
   // Stepper position.  This is here because it is not always convenient to interogate the stepper object.
   int32_t position;
   //  Power controls

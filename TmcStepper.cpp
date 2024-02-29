@@ -4,7 +4,7 @@
 TmcStepper::TmcStepper() {
     tmcConfig = {0, 0, 0, 0, 0, 0, 0, 0};
       // Set main configuration.  Set the TMC driver off.
-  uart_write_blocking(uart1, getCommand(forward), 8);
+////  uart_write_blocking(uart1, getCommand(forward), 8);
   // Set the tmcConfig variable to the desired step size.  Driver is off by default.
   //tmcstepper.tmcConfig = tmcstepper.stepsize128;
   //this->tmcstepper.tmcConfig = this->tmcstepper.stepsize256;
@@ -13,10 +13,10 @@ TmcStepper::TmcStepper() {
   tmcConfig = stepsize016;
   //this->tmcstepper.tmcConfig = this->tmcstepper.stepsize008;
   // Set the step size and turn the driver off.
-  uart_write_blocking(uart1, tmcDriverPower(false), 8);
+////  uart_write_blocking(uart1, tmcDriverPower(false), 8);
   // Set the power off behavior and braking.
-  uart_write_blocking(uart1, getCommand(powerBrakingConfig), 8);
-  uart_write_blocking(uart1, getCommand(iHoldiRun), 8);
+////  uart_write_blocking(uart1, getCommand(powerBrakingConfig), 8);
+////  uart_write_blocking(uart1, getCommand(iHoldiRun), 8);
 }
 
 // Calculate the CRC, which is the last byte in the datagram.  Return the CRC.
