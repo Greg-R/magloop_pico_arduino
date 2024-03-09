@@ -71,7 +71,7 @@ void Hardware::SWR_Test()
     // Read and print forward ADC integer.
     adc_select_input(1);
     tft.setCursor(225, dataCoorY + 30);
-    tft.print(adc_read());
+        tft.print(adc_read());
     // Read and print reverse ADC integer.
     adc_select_input(0);
     tft.setCursor(225, dataCoorY + 60);

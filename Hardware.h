@@ -30,14 +30,15 @@
 
 #pragma once
 #include <stdint.h>
-//#include "pico/stdlib.h"
+#include "pico/stdlib.h"
 #include <string>
 #include <vector>
 #include <utility>
-//#include "hardware/spi.h"
-//#include "hardware/timer.h"
-//#include "hardware/clocks.h"
-//#include "hardware/uart.h"
+#include "hardware/spi.h"
+#include "hardware/timer.h"
+#include "hardware/clocks.h"
+#include "hardware/uart.h"
+#include "hardware/adc.h"
 #include "Adafruit_ILI9341.h"
 #include "AccelStepper.h"
 #include "StepperManagement.h"

@@ -39,23 +39,23 @@
 #include "EEPROM.h"
 #include "Data.h"
 #include "Button.h"
-//#include "TuneInputs/TuneInputs.h"
+#include "TuneInputs.h"
 #include "TmcStepper.h"
-//#include "Hardware/Hardware.h"
+#include "Hardware.h"
 
-#define PIN_CS   13
+#define PIN_CS  13
 #define DISP_DC 16
 
 int main()
 {
-//  stdio_init_all();
+  //stdio_init_all();
 
   // Initialize stepper and limit switch GPIOs:
 
-  //gpio_set_function(0, GPIO_FUNC_SIO); // Stepper Step
-  pinMode(0, OUTPUT);
-  //gpio_set_function(1, GPIO_FUNC_SIO); // Stepper Dir
-  pinMode(1, OUTPUT);
+  gpio_set_function(0, GPIO_FUNC_SIO); // Stepper Step
+//  pinMode(0, OUTPUT);
+  gpio_set_function(1, GPIO_FUNC_SIO); // Stepper Dir
+//  pinMode(1, OUTPUT);
   gpio_set_function(2, GPIO_FUNC_SIO); // RF Amp Power
   gpio_set_function(3, GPIO_FUNC_SIO); // Op Amp Power
 
@@ -89,7 +89,7 @@ int main()
   uart_set_format(uart1, 8, 1, UART_PARITY_NONE);
   // uart_set_fifo_enabled(uart1, true);
 
-//  int currentFrequency;
+  int currentFrequency;
   int bypassTest = 5;  // Set to arbitrary value other than 0 or 10.
 
   //  The data object manages constants and variables involved with frequencies, stepper motor positions,
@@ -215,7 +215,7 @@ int main()
     // tuneInputs.SelectParameter();
     //  testArray.EncoderTest();
     // testArray.UserNumericInput2(enterbutton, exitbutton, 7000000);
-////    int i, submenuIndex;
+    int i, submenuIndex;
     //  Refresh display:
     display.ShowMainDisplay(display.menuIndex); //  This function erases the entire display.
     display.ShowSubmenuData(display.minSWR, data.workingData.currentFrequency);
