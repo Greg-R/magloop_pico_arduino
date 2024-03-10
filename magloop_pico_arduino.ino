@@ -28,8 +28,10 @@
     GNU General Public License for more details.
 */
 // #define PICO_STACK_SIZE _u(0x1000)  // Uncomment if stack gets blown.  This doubles stack size.//
+#include "pico/stdlib.h"
+//#include "hardware/spi.h"
 #include <Adafruit_GFX.h>    // Core graphics library
-#include <SPI.h>
+//#include <SPI.h>
 #include <Adafruit_ILI9341.h>
 #include "DisplayManagement.h"
 #include <AccelStepper.h>
@@ -43,13 +45,62 @@
 #include "TmcStepper.h"
 #include "Hardware.h"
 
-#define PIN_CS  13
-#define DISP_DC 16
+//#define PIN_CS  13
+//#define DISP_DC 16
 
-int main()
-{
-  //stdio_init_all();
+#define TFT_CS    13      // TFT CS  pin is connected to arduino pin 8
+#define TFT_RST   9      // TFT RST pin is connected to arduino pin 9
+#define TFT_DC    16     // TFT DC  pin is connected to arduino pin 10
+#define TFT_MOSI  15
+#define TFT_SCLK  14
+//#define TFT_MISO  0
 
+  int currentFrequency;
+  int bypassTest = 5;  // Set to arbitrary value other than 0 or 10.
+
+//SPISettings spisettings(1000000, MSBFIRST, SPI_MODE1);
+
+  //  The data object manages constants and variables involved with frequencies, stepper motor positions,
+  //  and GPIOs.
+//  Data data = Data();
+  Data data;
+
+  //  Construct and initialize buttons.
+  Button enterbutton(data.enterButton);
+  Button autotunebutton(data.autotuneButton);
+  Button exitbutton(data.exitButton);
+
+  //  Instantiate the display object.  Note that the SPI is handled in the display object.
+  //Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_CS, DISP_DC, -1);
+  Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
+
+  //  Instantiate the EEPROM object, which is actually composed of FLASH.
+  EEPROMClass eeprom = EEPROMClass();
+  //  Read the EEPROM and update the Data object.
+
+  //  Next instantiate the DDS.
+  DDS dds = DDS(data.DDS_RST, data.DDS_DATA, data.DDS_FQ_UD, data.WLCK);
+
+  // Instantiate SWR object.  Read bridge offsets later when other circuits are active.
+  SWR swr = SWR();
+
+  //  Instantiate the TMC stepper:
+  TmcStepper tmcstepper = TmcStepper();
+
+  //  Instantiate the Stepper Manager:
+  StepperManagement stepper = StepperManagement(tft, dds, swr, data, tmcstepper, AccelStepper::MotorInterfaceType::DRIVER, 0, 1);
+
+  Hardware testArray = Hardware(tft, dds, swr, enterbutton, autotunebutton, exitbutton, data, stepper, tmcstepper);
+
+  // Create the TuneInputs object.
+  TuneInputs tuneInputs = TuneInputs(tft, eeprom, data, dds, enterbutton, autotunebutton, exitbutton, tmcstepper);
+
+  // Instantiate the DisplayManagement object.  This object has many important methods.
+  DisplayManagement display = DisplayManagement(tft, dds, swr, stepper, tmcstepper, eeprom, data, enterbutton,
+                                                autotunebutton, exitbutton, tuneInputs, testArray);
+
+  void setup()
+{                                              
   // Initialize stepper and limit switch GPIOs:
 
   gpio_set_function(0, GPIO_FUNC_SIO); // Stepper Step
@@ -89,32 +140,25 @@ int main()
   uart_set_format(uart1, 8, 1, UART_PARITY_NONE);
   // uart_set_fifo_enabled(uart1, true);
 
-  int currentFrequency;
-  int bypassTest = 5;  // Set to arbitrary value other than 0 or 10.
-
-  //  The data object manages constants and variables involved with frequencies, stepper motor positions,
-  //  and GPIOs.
-  Data data = Data();
-
-  //  Construct and initialize buttons.
-  Button enterbutton(data.enterButton);
-  Button autotunebutton(data.autotuneButton);
-  Button exitbutton(data.exitButton);
   enterbutton.initialize();
   exitbutton.initialize();
   autotunebutton.initialize();
 
-  //  Instantiate the display object.  Note that the SPI is handled in the display object.
-  Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_CS, DISP_DC, -1);
+//setRX(pin_size_t pin);
+//SPI.setCS(13);
+//SPI.setSCK(14);
+//SPI.setTX(15);
+//SPI.begin(true);
+
   //  Configure the display object.
   tft.initSPI();
   tft.begin();
   tft.setRotation(3);
   tft.fillScreen(ILI9341_BLACK);
 
-  //  Instantiate the EEPROM object, which is actually composed of FLASH.
-  EEPROMClass eeprom = EEPROMClass();
-  //  Read the EEPROM and update the Data object.
+  // Power on all circuits except stepper and relay.  This is done early to allow circuits to stabilize before calibration.
+  display.PowerStepDdsCirRelay(false, 7000000, true, false);
+
   eeprom.begin(256);               //  1 FLASH page which is 256 bytes.  Not sure this is required if using get and put methods.
                                    //  Now read the struct from Flash which is read into the Data object.
   eeprom.get(0, data.workingData); // Read the workingData struct from EEPROM.
@@ -132,30 +176,7 @@ int main()
   // Slopes can't be computed until the actual values are loaded from FLASH:
   data.computeSlopes();
 
-  //  Next instantiate the DDS.
-  DDS dds = DDS(data.DDS_RST, data.DDS_DATA, data.DDS_FQ_UD, data.WLCK);
   dds.DDSWakeUp(); // This resets the DDS, and it will have no output.
-
-  // Instantiate SWR object.  Read bridge offsets later when other circuits are active.
-  SWR swr = SWR();
-
-  //  Instantiate the TMC stepper:
-  TmcStepper tmcstepper = TmcStepper();
-
-  //  Instantiate the Stepper Manager:
-  StepperManagement stepper = StepperManagement(tft, dds, swr, data, tmcstepper, AccelStepper::MotorInterfaceType::DRIVER, 0, 1);
-
-  Hardware testArray = Hardware(tft, dds, swr, enterbutton, autotunebutton, exitbutton, data, stepper, tmcstepper);
-
-  // Create the TuneInputs object.
-  TuneInputs tuneInputs = TuneInputs(tft, eeprom, data, dds, enterbutton, autotunebutton, exitbutton, tmcstepper);
-
-  // Instantiate the DisplayManagement object.  This object has many important methods.
-  DisplayManagement display = DisplayManagement(tft, dds, swr, stepper, tmcstepper, eeprom, data, enterbutton,
-                                                autotunebutton, exitbutton, tuneInputs, testArray);
-
-  // Power on all circuits except stepper and relay.  This is done early to allow circuits to stabilize before calibration.
-  display.PowerStepDdsCirRelay(false, 7000000, true, false);
 
   // Show "Splash" screen for 5 seconds.  This also allows circuits to stabilize.
   display.Splash(data.version, data.releaseDate);
@@ -181,7 +202,7 @@ int main()
       testArray.InitialTests(); // Run hardware tests.
       display.ErasePage();
       display.updateMessageMiddle("Cycle Power to Restart");
-      return 0; // STOP
+//      return 0; // STOP
     }
   }
 
@@ -208,10 +229,11 @@ int main()
   // display.PowerStepDdsCirRelay(false, 7000000, true, false);
 
   display.menuIndex = display.TopMenuState::FREQMENU; // Begin in Frequency menu.
+}
 
   // Main loop state machine:
-  while (true)
-  {
+//  while (true)
+void loop(){
     // tuneInputs.SelectParameter();
     //  testArray.EncoderTest();
     // testArray.UserNumericInput2(enterbutton, exitbutton, 7000000);
@@ -240,7 +262,7 @@ int main()
       display.menuIndex = display.TopMenuState::FREQMENU;
       break;
     } // switch (menuIndex)
-  }   // while(1)  (end of main loop)
+  }   // end of loop()
 
-  return 0; // Program should never reach this statement.
-}
+ // return 0; // Program should never reach this statement.
+//}
