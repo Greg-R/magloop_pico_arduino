@@ -31,14 +31,14 @@
 #include "pico/stdlib.h"
 //#include "hardware/spi.h"
 #include <Adafruit_GFX.h>    // Core graphics library
-//#include <SPI.h>
+#include <SPI.h>
 #include <Adafruit_ILI9341.h>
 #include "DisplayManagement.h"
 #include <AccelStepper.h>
 #include "StepperManagement.h"
 #include "DDS.h"
 #include "SWR.h"
-#include "EEPROM.h"
+#include <EEPROM.h>
 #include "Data.h"
 #include "Button.h"
 #include "TuneInputs.h"
@@ -47,6 +47,12 @@
 
 //#define PIN_CS  13
 //#define DISP_DC 16
+#define SPI_PORT spi1
+//#define PIN_MISO 16  MISO not used
+#define PIN_CS   13
+#define PIN_SCK  14
+#define PIN_MOSI 15
+#define DISP_DC 16  //  P2 changed from 19 to 16.
 
 #define TFT_CS    13      // TFT CS  pin is connected to arduino pin 8
 #define TFT_RST   9      // TFT RST pin is connected to arduino pin 9
@@ -58,24 +64,27 @@
   int currentFrequency;
   int bypassTest = 5;  // Set to arbitrary value other than 0 or 10.
 
-//SPISettings spisettings(1000000, MSBFIRST, SPI_MODE1);
+//SPISettings spisettings(10000, MSBFIRST, SPI_MODE1);
+//SPISettings spisettings(1000000, MSBFIRST, SPI_MODE0);
 
   //  The data object manages constants and variables involved with frequencies, stepper motor positions,
   //  and GPIOs.
-//  Data data = Data();
-  Data data;
+  Data data = Data();
+//  Data data;
 
   //  Construct and initialize buttons.
-  Button enterbutton(data.enterButton);
-  Button autotunebutton(data.autotuneButton);
-  Button exitbutton(data.exitButton);
+  Button enterbutton = Button(data.enterButton);
+  Button autotunebutton  = Button(data.autotuneButton);
+  Button exitbutton = Button(data.exitButton);
 
   //  Instantiate the display object.  Note that the SPI is handled in the display object.
   //Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_CS, DISP_DC, -1);
-  Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
+//  Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
+//    Adafruit_ILI9341 tft = Adafruit_ILI9341(&SPI1, TFT_CS, TFT_DC, -1);
+    Adafruit_ILI9341 tft = Adafruit_ILI9341(&SPI1, 16, 13, -1);
 
   //  Instantiate the EEPROM object, which is actually composed of FLASH.
-  EEPROMClass eeprom = EEPROMClass();
+  //EEPROMClass eeprom = EEPROMClass();
   //  Read the EEPROM and update the Data object.
 
   //  Next instantiate the DDS.
@@ -93,25 +102,27 @@
   Hardware testArray = Hardware(tft, dds, swr, enterbutton, autotunebutton, exitbutton, data, stepper, tmcstepper);
 
   // Create the TuneInputs object.
-  TuneInputs tuneInputs = TuneInputs(tft, eeprom, data, dds, enterbutton, autotunebutton, exitbutton, tmcstepper);
+  TuneInputs tuneInputs = TuneInputs(tft, EEPROM, data, dds, enterbutton, autotunebutton, exitbutton, tmcstepper);
 
   // Instantiate the DisplayManagement object.  This object has many important methods.
-  DisplayManagement display = DisplayManagement(tft, dds, swr, stepper, tmcstepper, eeprom, data, enterbutton,
+  DisplayManagement display = DisplayManagement(tft, dds, swr, stepper, tmcstepper, EEPROM, data, enterbutton,
                                                 autotunebutton, exitbutton, tuneInputs, testArray);
 
   void setup()
-{                                              
+{                         
   // Initialize stepper and limit switch GPIOs:
 
-  gpio_set_function(0, GPIO_FUNC_SIO); // Stepper Step
-//  pinMode(0, OUTPUT);
-  gpio_set_function(1, GPIO_FUNC_SIO); // Stepper Dir
-//  pinMode(1, OUTPUT);
+//  gpio_set_function(0, GPIO_FUNC_SIO); // Stepper Step
+  pinMode(0, OUTPUT);
+//  gpio_set_function(1, GPIO_FUNC_SIO); // Stepper Dir
+  pinMode(1, OUTPUT);
   gpio_set_function(2, GPIO_FUNC_SIO); // RF Amp Power
   gpio_set_function(3, GPIO_FUNC_SIO); // Op Amp Power
 
-  gpio_set_function(10, GPIO_FUNC_SIO); // Limit switch
-  gpio_set_function(11, GPIO_FUNC_SIO); // Limit switch
+//  gpio_set_function(10, GPIO_FUNC_SIO); // Limit switch
+  pinMode(10, OUTPUT);
+//  gpio_set_function(11, GPIO_FUNC_SIO); // Limit switch
+  pinMode(11, OUTPUT);
   gpio_set_function(19, GPIO_FUNC_SIO); // RF relay
 
   gpio_set_dir(0, GPIO_OUT); // Stepper Step
@@ -130,6 +141,27 @@
   gpio_pull_up(10);
   gpio_pull_up(11);
 
+      // SPI initialisation.  2nd parameter is SPI clock frequency in Hz.
+//    spi_init(SPI_PORT, 62500*1000);  //  Set to 20 MHz.
+    //gpio_set_function(PIN_MISO, GPIO_FUNC_SPI); MISO not used
+//    gpio_set_function(PIN_CS,   GPIO_FUNC_SIO);
+//    gpio_set_function(PIN_SCK,  GPIO_FUNC_SPI);
+//    gpio_set_function(PIN_MOSI, GPIO_FUNC_SPI);
+
+//bool setRX(pin_size_t pin);
+SPI1.setCS(13);
+SPI1.setSCK(14);
+SPI1.setTX(15);
+SPI1.setRX(12);
+SPI1.begin(true);
+
+
+//  SPI1.setSCK(14);
+//  SPI1.setCS(13);
+
+//  SPI1.setTX(11);
+//SPI1.begin(true);
+
   // Designate GPIO8 as UART1 transmit.
   gpio_set_function(8, GPIO_FUNC_UART); // UART1 TX
   // Initialize the UART.
@@ -144,11 +176,7 @@
   exitbutton.initialize();
   autotunebutton.initialize();
 
-//setRX(pin_size_t pin);
-//SPI.setCS(13);
-//SPI.setSCK(14);
-//SPI.setTX(15);
-//SPI.begin(true);
+
 
   //  Configure the display object.
   tft.initSPI();
@@ -159,18 +187,18 @@
   // Power on all circuits except stepper and relay.  This is done early to allow circuits to stabilize before calibration.
   display.PowerStepDdsCirRelay(false, 7000000, true, false);
 
-  eeprom.begin(256);               //  1 FLASH page which is 256 bytes.  Not sure this is required if using get and put methods.
+  //eeprom.begin(256);               //  1 FLASH page which is 256 bytes.  Not sure this is required if using get and put methods.
                                    //  Now read the struct from Flash which is read into the Data object.
-  eeprom.get(0, data.workingData); // Read the workingData struct from EEPROM.
+  EEPROM.get(0, data.workingData); // Read the workingData struct from EEPROM.
 
   //  Now examine the data in the buffer to see if the EEPROM should be initialized.
   //  There is a specific number written to the EEPROM when it is initialized.
   if (data.workingData.initialized != 0x55555555)
   {
     data.writeDefaultValues(); //  Writes default values in to the dataStruct in the Data object.
-    eeprom.put(0, data.workingData);
-    eeprom.commit();
-    eeprom.get(0, data.workingData); // Read the workingData struct from EEPROM.
+    EEPROM.put(0, data.workingData);
+  //  eeprom.commit();
+    EEPROM.get(0, data.workingData); // Read the workingData struct from EEPROM.
   }
 
   // Slopes can't be computed until the actual values are loaded from FLASH:
@@ -183,6 +211,8 @@
   busy_wait_ms(5000);
   tft.fillScreen(ILI9341_BLACK); // Clear display.
 
+    stepper.ResetStepperToZero();
+
   // Run initial tests if hardware has not been accepted.
   if (data.workingData.hardware != 0x55555555)
   {
@@ -194,15 +224,14 @@
     if (bypassTest == 10)
     {
       data.workingData.hardware = 0x55555555;
-      eeprom.put(0, data.workingData);
-      eeprom.commit(); // Write to EEPROM.
+      EEPROM.put(0, data.workingData);
+    //  eeprom.commit(); // Write to EEPROM.
     }
     if (bypassTest == 0)
     {
       testArray.InitialTests(); // Run hardware tests.
       display.ErasePage();
       display.updateMessageMiddle("Cycle Power to Restart");
-//      return 0; // STOP
     }
   }
 

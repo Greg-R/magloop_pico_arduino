@@ -53,7 +53,7 @@ Button::Button(int gpio): gpio(gpio) {
 *****/
 void Button::initialize() {
 //gpio_set_function(gpio, GPIO_FUNC_SIO);
-pinMode(gpio, INPUT);
+pinMode(gpio, INPUT_PULLUP);
 //gpio_set_dir(gpio, GPIO_IN);
 //gpio_pull_up(gpio);
 

@@ -236,7 +236,7 @@ void Hardware::EncoderTest()
 void Hardware::MotorTest()
 {
   EraseBelowMenu();
-  ; // Clear display.
+  // Clear display.
   tft.setTextColor(ILI9341_GREEN);
   tft.setCursor(titleCoorX, titleCoorY);
   tft.setFont(&FreeSerif9pt7b);
