@@ -30,9 +30,9 @@
 
 #include "TuneInputs.h"
 
-TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, EEPROMClass &eeprom, Data &data, DDS& dds, Button &enterbutton, 
+TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &enterbutton, 
                        Button &autotunebutton, Button &exitbutton, TmcStepper &tmcstepper)
-                     : DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), eeprom(eeprom), data(data),
+                     : DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), data(data),
                        enterbutton(enterbutton), autotunebutton(autotunebutton), exitbutton(exitbutton), tmcstepper(tmcstepper)
 {
   parameters[0] = data.workingData.zero_offset;
@@ -154,8 +154,8 @@ void TuneInputs::SelectParameter()
           break;
         }
         lastexitbutton = true;  // Prevents exit button from skipping a level.
-        eeprom.put(0, data.workingData);  // Save parameters to EEPROM.
-        eeprom.commit();
+        EEPROM.put(0, data.workingData);  // Save parameters to EEPROM.
+        //eeprom.commit();
         //  Need to refresh graphics, because they were changed by ChangeFrequency!
         state = State::state0; // Refresh the graphics.
       }

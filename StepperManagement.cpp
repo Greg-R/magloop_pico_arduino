@@ -66,12 +66,12 @@ void StepperManagement::MoveStepperToPosition(int32_t position)
     run();
     data.position = currentPosition();  // Write the current stepper position to the data object.
     // This code handles switch closures, both for calibration (zero), and maximum switch faults.
-    if ((gpio_get(data.maxswitch) == false) or (gpio_get(data.zeroswitch) == false))
+    if ((digitalRead(data.maxswitch) == false) or (digitalRead(data.zeroswitch) == false))
     {
       // Set flag while switch is still closed.
-      if (gpio_get(data.maxswitch) == false)
+      if (digitalRead(data.maxswitch) == false)
         data.maxclose = true;
-      if (gpio_get(data.zeroswitch) == false)
+      if (digitalRead(data.zeroswitch) == false)
         data.zeroclose = true;
       stop(); // Properly decelerate and stop the stepper.
       runToPosition();

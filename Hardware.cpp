@@ -150,7 +150,7 @@ void Hardware::ButtonTest()
       tft.print("PUSHED");
     }
     //     Antenna switch tests
-    if (gpio_get(data.zeroswitch) == 0)
+    if (digitalRead(data.zeroswitch) == 0)
     {
       tft.setTextColor(ILI9341_WHITE);
       tft.setCursor(220, dataCoorY + 90);
@@ -162,7 +162,7 @@ void Hardware::ButtonTest()
       tft.setTextColor(ILI9341_BLACK);
       tft.print("CLOSED");
     }
-    if (gpio_get(data.maxswitch) == 0)
+    if (digitalRead(data.maxswitch) == 0)
     {
       tft.setTextColor(ILI9341_WHITE);
       tft.setCursor(220, dataCoorY + 120);

@@ -102,10 +102,10 @@
   Hardware testArray = Hardware(tft, dds, swr, enterbutton, autotunebutton, exitbutton, data, stepper, tmcstepper);
 
   // Create the TuneInputs object.
-  TuneInputs tuneInputs = TuneInputs(tft, EEPROM, data, dds, enterbutton, autotunebutton, exitbutton, tmcstepper);
+  TuneInputs tuneInputs = TuneInputs(tft, data, dds, enterbutton, autotunebutton, exitbutton, tmcstepper);
 
   // Instantiate the DisplayManagement object.  This object has many important methods.
-  DisplayManagement display = DisplayManagement(tft, dds, swr, stepper, tmcstepper, EEPROM, data, enterbutton,
+  DisplayManagement display = DisplayManagement(tft, dds, swr, stepper, tmcstepper, data, enterbutton,
                                                 autotunebutton, exitbutton, tuneInputs, testArray);
 
   void setup()
@@ -116,37 +116,30 @@
   pinMode(0, OUTPUT);
 //  gpio_set_function(1, GPIO_FUNC_SIO); // Stepper Dir
   pinMode(1, OUTPUT);
-  gpio_set_function(2, GPIO_FUNC_SIO); // RF Amp Power
-  gpio_set_function(3, GPIO_FUNC_SIO); // Op Amp Power
+  pinMode(2, OUTPUT); // RF Amp Power
+  pinMode(3, OUTPUT); // Op Amp Power
 
 //  gpio_set_function(10, GPIO_FUNC_SIO); // Limit switch
-  pinMode(10, OUTPUT);
+  pinMode(10, INPUT_PULLUP);
 //  gpio_set_function(11, GPIO_FUNC_SIO); // Limit switch
-  pinMode(11, OUTPUT);
-  gpio_set_function(19, GPIO_FUNC_SIO); // RF relay
+  pinMode(11, INPUT_PULLUP);
+  pinMode(19, OUTPUT); // RF relay
 
-  gpio_set_dir(0, GPIO_OUT); // Stepper Step
-  gpio_set_dir(1, GPIO_OUT); // Stepper Dir
+  //gpio_set_dir(0, GPIO_OUT); // Stepper Step
+  //gpio_set_dir(1, GPIO_OUT); // Stepper Dir
 
-  gpio_set_dir(2, GPIO_OUT); // RF Amp Power
-  gpio_put(2, false);        // RF Amp Power off
-  gpio_set_dir(3, GPIO_OUT); // Op Amp Power
-  gpio_put(3, false);        // Op Amp Power off
+  //gpio_set_dir(2, GPIO_OUT); // RF Amp Power
+  digitalWrite(2, LOW);        // RF Amp Power off
+  //gpio_set_dir(3, GPIO_OUT); // Op Amp Power
+  digitalWrite(3, LOW);        // Op Amp Power off
 
-  gpio_set_dir(10, GPIO_IN);  // Limit switch
-  gpio_set_dir(11, GPIO_IN);  // Limit switch
-  gpio_set_dir(19, GPIO_OUT); // RF Relay
-  gpio_put(19, false);
+  //gpio_set_dir(10, GPIO_IN);  // Limit switch
+  //gpio_set_dir(11, GPIO_IN);  // Limit switch
+  //gpio_set_dir(19, GPIO_OUT); // RF Relay
+  digitalWrite(19, LOW);
   //  The limit switch inputs need pull-ups:
-  gpio_pull_up(10);
-  gpio_pull_up(11);
-
-      // SPI initialisation.  2nd parameter is SPI clock frequency in Hz.
-//    spi_init(SPI_PORT, 62500*1000);  //  Set to 20 MHz.
-    //gpio_set_function(PIN_MISO, GPIO_FUNC_SPI); MISO not used
-//    gpio_set_function(PIN_CS,   GPIO_FUNC_SIO);
-//    gpio_set_function(PIN_SCK,  GPIO_FUNC_SPI);
-//    gpio_set_function(PIN_MOSI, GPIO_FUNC_SPI);
+  //(10);
+  //gpio_pull_up(11);
 
 //bool setRX(pin_size_t pin);
 SPI1.setCS(13);
@@ -154,13 +147,6 @@ SPI1.setSCK(14);
 SPI1.setTX(15);
 SPI1.setRX(12);
 SPI1.begin(true);
-
-
-//  SPI1.setSCK(14);
-//  SPI1.setCS(13);
-
-//  SPI1.setTX(11);
-//SPI1.begin(true);
 
   // Designate GPIO8 as UART1 transmit.
   gpio_set_function(8, GPIO_FUNC_UART); // UART1 TX
@@ -211,7 +197,9 @@ SPI1.begin(true);
   busy_wait_ms(5000);
   tft.fillScreen(ILI9341_BLACK); // Clear display.
 
-    stepper.ResetStepperToZero();
+//display.AutoTuneSWR(0, 7100000);
+//    display.PowerStepDdsCirRelay(true, 0, true, false);
+//    stepper.ResetStepperToZero();
 
   // Run initial tests if hardware has not been accepted.
   if (data.workingData.hardware != 0x55555555)

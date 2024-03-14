@@ -34,16 +34,10 @@
 
 DisplayUtility::DisplayUtility(Adafruit_ILI9341& tft, DDS &dds, SWR &swr, Data &data, TmcStepper &tmcstepper): tft(tft), dds(dds), swr(swr), data(data), tmcstepper(tmcstepper), menuEncoder(20, 18), frequencyEncoder(21, 17)
 {
-//  tft(tft);
-//  dds = dds;
-//  swr = swr;
-//  data = data;
-//  tmcstepper = tmcstepper;
   startUpFlag = false;
   calFlag = false;
   menuEncoder = Rotary(20, 18); // Swap if encoder works in wrong direction.
   frequencyEncoder = Rotary(21, 17); // Swap if encoder works in wrong direction.
- // horseshitEncoder(21, 17);
   menuEncoder.begin(true, false);
   frequencyEncoder.begin(true, false);
   menuEncoderMovement = 0;
@@ -302,7 +296,7 @@ void DisplayUtility::HighlightNewPresetChoice(int submenuIndex, int whichBandOpt
 *****/
 int DisplayUtility::DetectMaxSwitch()
 {
-  if (gpio_get(data.maxswitch) == LOW)
+  if (digitalRead(data.maxswitch) == LOW)
   {
     //  stepper.move(-300);
     //  stepper.runToPosition();
@@ -481,9 +475,9 @@ void DisplayUtility::PowerStepDdsCirRelay(bool stepperPower, uint32_t frequency,
   // Going into AutoTune, turn on the stepper last.
   if (stepperPower & circuitPower)
   {
-    gpio_put(data.OPAMPPOWER, circuitPower);
-    gpio_put(data.RFAMPPOWER, circuitPower);
-    gpio_put(data.RFRELAYPOWER, relayPower);
+    digitalWrite(data.OPAMPPOWER, circuitPower);
+    digitalWrite(data.RFAMPPOWER, circuitPower);
+    digitalWrite(data.RFRELAYPOWER, relayPower);
     // gpio_put(data.STEPPERSLEEPNOT, stepperPower); //  Deactivating the stepper driver is important to reduce RFI.
     if (stepperPower)
       uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
@@ -500,9 +494,9 @@ void DisplayUtility::PowerStepDdsCirRelay(bool stepperPower, uint32_t frequency,
     // Turn off stepper driver.
       uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
     dds.SendFrequency(frequency);
-    gpio_put(data.OPAMPPOWER, circuitPower);
-    gpio_put(data.RFAMPPOWER, circuitPower);
-    gpio_put(data.RFRELAYPOWER, relayPower);
+    digitalWrite(data.OPAMPPOWER, circuitPower);
+    digitalWrite(data.RFAMPPOWER, circuitPower);
+    digitalWrite(data.RFRELAYPOWER, relayPower);
   }
     // 
   if ((not stepperPower) & (not circuitPower))
@@ -512,17 +506,17 @@ void DisplayUtility::PowerStepDdsCirRelay(bool stepperPower, uint32_t frequency,
       uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
     else
       uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
-    gpio_put(data.OPAMPPOWER, circuitPower);
-    gpio_put(data.RFAMPPOWER, circuitPower);
-    gpio_put(data.RFRELAYPOWER, relayPower);
+    digitalWrite(data.OPAMPPOWER, circuitPower);
+    digitalWrite(data.RFAMPPOWER, circuitPower);
+    digitalWrite(data.RFRELAYPOWER, relayPower);
   }
   // This case is for zeroing the stepper.
     if (stepperPower & not circuitPower)
   {
     // gpio_put(data.STEPPERSLEEPNOT, stepperPower); //  Deactivating the stepper driver is important to reduce RFI.
-    gpio_put(data.OPAMPPOWER, circuitPower);
-    gpio_put(data.RFAMPPOWER, circuitPower);
-    gpio_put(data.RFRELAYPOWER, relayPower);
+    digitalWrite(data.OPAMPPOWER, circuitPower);
+    digitalWrite(data.RFAMPPOWER, circuitPower);
+    digitalWrite(data.RFRELAYPOWER, relayPower);
     if (stepperPower)
       uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
     else

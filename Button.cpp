@@ -71,7 +71,7 @@ void Button::buttonPushed() {
 //uint64_t time;
 switch(state) {
   case State::state0:
-    if(gpio_get(gpio) == false) {  // Button pushed, proceed to state1.
+    if(digitalRead(gpio) == false) {  // Button pushed, proceed to state1.
       state = State::state1;
       startTime = time_us_64();
     }
@@ -82,7 +82,7 @@ switch(state) {
   case State::state1:                          // This state may need timing added.
   time = time_us_64();
   if((time - startTime) > debounceInterval) {
-      if(gpio_get(gpio) == false) {
+      if(digitalRead(gpio) == false) {
         pushed = true;  // Button is de-bounced and push detected.
         state = State::state2;
      //   break;
@@ -96,7 +96,7 @@ switch(state) {
     state = State::state1;  // Stay in state1 until debounceInterval has elapsed.
     break;
   case State::state2:
-    if(gpio_get(gpio) == false) {  // Button still pushed; stay here until it is not.
+    if(digitalRead(gpio) == false) {  // Button still pushed; stay here until it is not.
       state = State::state2;
     }
     else {
@@ -104,7 +104,7 @@ switch(state) {
     }
     break;
   case State::state3:
-    if(gpio_get(gpio) == true) {  // Button is released.  Go back to state0.
+    if(digitalRead(gpio) == true) {  // Button is released.  Go back to state0.
       state = State::state0;
       pushed = false;             // Button is released.
     }

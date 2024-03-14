@@ -56,7 +56,7 @@ class TuneInputs : public DisplayUtility {
 
 public:
     Adafruit_ILI9341 &tft;
-    EEPROMClass &eeprom;
+    //EEPROMClass &eeprom;
     Data &data;
     Button &enterbutton;
     Button &autotunebutton;
@@ -82,7 +82,7 @@ public:
     }; // Used to move between states in state machines.
     State state;
 
-    TuneInputs(Adafruit_ILI9341 &tft, EEPROMClass &eeprom, Data &data, DDS& dds, Button &enterbutton,
+    TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &enterbutton,
                Button &autotunebutton, Button &exitbutton, TmcStepper &tmcstepper);
 
     void SelectParameter();

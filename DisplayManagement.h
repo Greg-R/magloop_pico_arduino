@@ -38,7 +38,7 @@
 #include "DDS.h"
 #include "SWR.h"
 #include "StepperManagement.h"
-#include "EEPROM.h"
+//#include "EEPROM.h"
 #include "GraphPlot.h"
 #include "DisplayUtility.h"
 #include "Data.h"
@@ -60,7 +60,7 @@ public:
     DDS &dds;
     SWR &swr;
     StepperManagement &stepper;
-    EEPROMClass &eeprom;
+    //EEPROMClass &eeprom;
     Data &data;
     Button &enterbutton;
     Button &autotunebutton;
@@ -105,7 +105,7 @@ public:
     bool startUpFlag;
     bool calFlag;
 
-    DisplayManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr, StepperManagement &stepper, TmcStepper &tmcstepper, EEPROMClass &eeprom, Data &data,
+    DisplayManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr, StepperManagement &stepper, TmcStepper &tmcstepper, Data &data,
                       Button &enterbutton, Button &autotunebutton, Button &exitbutton, TuneInputs &tuneInputs, Hardware &testArray);
 
     void Splash(std::string version, std::string releaseDate);

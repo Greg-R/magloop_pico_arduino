@@ -32,11 +32,12 @@
 
 DisplayManagement::DisplayManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr,
                                      StepperManagement &stepper, TmcStepper &tmcstepper,
-                                     EEPROMClass &eeprom, Data &data, Button &enterbutton, 
+//                                     EEPROMClass &eeprom, Data &data, Button &enterbutton, 
+                                     Data &data, Button &enterbutton,                                      
                                      Button &autotunebutton, Button &exitbutton, TuneInputs &tuneInputs, 
                                      Hardware &testArray) : GraphPlot(tft, dds, data), 
                                      DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), dds(dds), swr(swr),
-                                     stepper(stepper), eeprom(eeprom), data(data), enterbutton(enterbutton), 
+                                     stepper(stepper), data(data), enterbutton(enterbutton), 
                                      autotunebutton(autotunebutton), exitbutton(exitbutton), 
                                      tuneInputs(tuneInputs), testArray(testArray)
 {
@@ -123,8 +124,8 @@ void DisplayManagement::frequencyMenuOption()
       }
       data.workingData.currentFrequency = frequency;
       data.workingData.lastFreq[whichBandOption] = frequency;
-      eeprom.put(0, data.workingData);
-      eeprom.commit(); // Write to EEPROM.
+      EEPROM.put(0, data.workingData);
+      //eeprom.commit(); // Write to EEPROM.
       tft.fillRect(0, 100, 311, 150, ILI9341_BLACK); // ???
       minSWRAuto = AutoTuneSWR(whichBandOption, frequency); // Auto tune here
       // After AutoTune, do full update of display with SWR vs. frequency plot:
@@ -179,7 +180,7 @@ int DisplayManagement::manualTune()
     }
     autotunebutton.buttonPushed(); // Poll autotunebutton.
                                    // Is this data.maxswitch protection needed here???
-    if (autotunebutton.pushed == true and (not lastautotunebutton) and gpio_get(data.maxswitch))
+    if (autotunebutton.pushed == true and (not lastautotunebutton) and digitalRead(data.maxswitch))
     { // Redo the Autotune at new frequency/position
       minSWRAuto = AutoTuneSWR(data.workingData.currentBand, data.workingData.currentFrequency); // Auto tune here
       SWRMinPosition = stepper.currentPosition();                                                // Get the autotuned stepper position.
@@ -565,8 +566,8 @@ void DisplayManagement::DoFirstCalibrate()
   PowerStepDdsCirRelay(false, 0, false, false);  // Power down, calibration is complete.
   //  Set the calibrated flag in workingData.
   data.workingData.calibrated = 1;
-  eeprom.put(0, data.workingData);
-  eeprom.commit(); // This writes a page to Flash memory.  This includes the position counts
+  EEPROM.put(0, data.workingData);
+  //eeprom.commit(); // This writes a page to Flash memory.  This includes the position counts
                    // and preset frequencies.
   // Slopes can't be computed until the actual values are loaded from flash:
   data.computeSlopes();
@@ -618,7 +619,7 @@ void DisplayManagement::DoSingleBandCalibrate(int whichBandOption)
     frequency = data.workingData.bandEdges[whichBandOption][j]; // Select a band edge
     while (true)
     {
-      if (gpio_get(data.maxswitch) != HIGH)
+      if (digitalRead(data.maxswitch) != HIGH)
       {                               // At the end stop switch?
         stepper.ResetStepperToZero(); // Yep, so leave.
         return;
@@ -647,7 +648,7 @@ void DisplayManagement::DoSingleBandCalibrate(int whichBandOption)
     position = data.workingData.bandLimitPositionCounts[whichBandOption][1] - 50;
   } // end for (j
   position = SWRFinalPosition + 50;
-  eeprom.commit(); // Write values to EEPROM
+  //eeprom.commit(); // Write values to EEPROM
   updateMessageTop("                     Press Exit");
   updateMessageBottom("     Single Band Calibrate Complete");
   //PowerStepDdsCirRelay(false, 0, false, false); // !!!
@@ -706,8 +707,8 @@ void DisplayManagement::ProcessPresets()
       break;
     case State::state3: // Run AutoTuneSWR() at the selected preset frequency.
       this->data.workingData.currentFrequency = frequency;
-      eeprom.put(0, data.workingData);
-      eeprom.commit();
+      EEPROM.put(0, data.workingData);
+      //eeprom.commit();
       minSWRAuto = AutoTuneSWR(whichBandOption, data.workingData.currentFrequency);
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
       GraphAxis(whichBandOption);
@@ -797,8 +798,8 @@ int DisplayManagement::SelectPreset()
      frequency = tuneInputs.ChangeParameter(frequency);
         // Save the preset to the EEPROM.
         data.workingData.presetFrequencies[whichBandOption][submenuIndex] = frequency;
-        eeprom.put(0, data.workingData);
-        eeprom.commit();
+        EEPROM.put(0, data.workingData);
+        //eeprom.commit();
         //  Need to refresh graphics, because they were changed by ChangeFrequency!
         state = State::state0; // Refresh the graphics.
         //  lastenterbutton = enterbutton.pushed;
