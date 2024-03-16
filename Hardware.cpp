@@ -44,7 +44,7 @@ void Hardware::SWR_Test()
 {
   std::vector<std::string> swrArray = {"SWR =", "FORWARD ADC", "REVERSE ADC"};
   EraseBelowMenu();
-  ; // Clear display.
+  // Clear display.
   tft.setTextColor(ILI9341_GREEN);
   tft.setCursor(titleCoorX, titleCoorY);
   tft.setFont(&FreeSerif9pt7b);
@@ -69,13 +69,13 @@ void Hardware::SWR_Test()
     tft.setCursor(120, dataCoorY);
     tft.print(swr.ReadSWRValue());
     // Read and print forward ADC integer.
-    adc_select_input(1);
+    //adc_select_input(1);
     tft.setCursor(225, dataCoorY + 30);
-        tft.print(adc_read());
+        tft.print(analogRead(1));
     // Read and print reverse ADC integer.
-    adc_select_input(0);
+    //adc_select_input(0);
     tft.setCursor(225, dataCoorY + 60);
-    tft.print(adc_read());
+    tft.print(analogRead(0));
     busy_wait_ms(1000);
     // Blank out old readings
     tft.fillRect(120, dataCoorY - 17, 70, 20, ILI9341_BLACK);

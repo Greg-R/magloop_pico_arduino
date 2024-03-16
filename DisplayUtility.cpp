@@ -480,9 +480,11 @@ void DisplayUtility::PowerStepDdsCirRelay(bool stepperPower, uint32_t frequency,
     digitalWrite(data.RFRELAYPOWER, relayPower);
     // gpio_put(data.STEPPERSLEEPNOT, stepperPower); //  Deactivating the stepper driver is important to reduce RFI.
     if (stepperPower)
-      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
+    //  uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
+      Serial2.write(tmcstepper.tmcDriverPower(true), 8);
     else
-      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
+    //  uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
+      Serial2.write(tmcstepper.tmcDriverPower(false), 8);
   }
   // Coming out of AutoTune, turn off the stepper first.  Circuit power up to measure SWR after stepper is off.
   if ((not stepperPower) & circuitPower)
@@ -492,7 +494,8 @@ void DisplayUtility::PowerStepDdsCirRelay(bool stepperPower, uint32_t frequency,
     //  uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
     //else
     // Turn off stepper driver.
-      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
+    //  uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
+      Serial2.write(tmcstepper.tmcDriverPower(false), 8);
     dds.SendFrequency(frequency);
     digitalWrite(data.OPAMPPOWER, circuitPower);
     digitalWrite(data.RFAMPPOWER, circuitPower);
@@ -503,9 +506,11 @@ void DisplayUtility::PowerStepDdsCirRelay(bool stepperPower, uint32_t frequency,
   {
     // gpio_put(data.STEPPERSLEEPNOT, stepperPower); //  Deactivating the stepper driver is important to reduce RFI.
     if (stepperPower)
-      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
+    //  uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
+      Serial2.write(tmcstepper.tmcDriverPower(true), 8);
     else
-      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
+   //   uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
+      Serial2.write(tmcstepper.tmcDriverPower(false), 8);
     digitalWrite(data.OPAMPPOWER, circuitPower);
     digitalWrite(data.RFAMPPOWER, circuitPower);
     digitalWrite(data.RFRELAYPOWER, relayPower);
@@ -518,9 +523,11 @@ void DisplayUtility::PowerStepDdsCirRelay(bool stepperPower, uint32_t frequency,
     digitalWrite(data.RFAMPPOWER, circuitPower);
     digitalWrite(data.RFRELAYPOWER, relayPower);
     if (stepperPower)
-      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
+//      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(true), 8);
+    Serial2.write(tmcstepper.tmcDriverPower(true), 8);
     else
-      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
+//      uart_write_blocking(uart1, tmcstepper.tmcDriverPower(false), 8);
+    Serial2.write(tmcstepper.tmcDriverPower(false), 8);
   }
 
   // Power down the DDS or set frequency.

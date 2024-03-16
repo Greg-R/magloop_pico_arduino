@@ -31,7 +31,7 @@
 #pragma once
 #include <stdint.h>
 #include <string>
-#include "pico/stdlib.h"
+//#include "pico/stdlib.h"
 #include "Adafruit_ILI9341.h"
 #include "Arduino.h"
 #include "DDS.h"

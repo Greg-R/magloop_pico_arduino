@@ -148,21 +148,26 @@ SPI1.setTX(15);
 SPI1.setRX(12);
 SPI1.begin(true);
 
+// UART setup:
+//Serial2.setRX(pin);
+Serial2.setTX(8);
+//Serial2.setRTS(pin);
+//Serial2.setCTS(pin);
+Serial2.begin(115200, SERIAL_8N1);
+
   // Designate GPIO8 as UART1 transmit.
-  gpio_set_function(8, GPIO_FUNC_UART); // UART1 TX
+//  gpio_set_function(8, GPIO_FUNC_UART); // UART1 TX
   // Initialize the UART.
-  uart_init(uart1, 115200);
+//  uart_init(uart1, 115200);
   // Set UART flow control CTS/RTS, we don't want these, so turn them off
-  uart_set_hw_flow(uart1, false, false);
+//  uart_set_hw_flow(uart1, false, false);
   // Set our data format
-  uart_set_format(uart1, 8, 1, UART_PARITY_NONE);
+ // uart_set_format(uart1, 8, 1, UART_PARITY_NONE);
   // uart_set_fifo_enabled(uart1, true);
 
   enterbutton.initialize();
   exitbutton.initialize();
   autotunebutton.initialize();
-
-
 
   //  Configure the display object.
   tft.initSPI();
@@ -191,14 +196,14 @@ SPI1.begin(true);
   data.computeSlopes();
 
   dds.DDSWakeUp(); // This resets the DDS, and it will have no output.
-
+//  display.PowerStepDdsCirRelay(true, 7000000, true, false);
   // Show "Splash" screen for 5 seconds.  This also allows circuits to stabilize.
   display.Splash(data.version, data.releaseDate);
   busy_wait_ms(5000);
   tft.fillScreen(ILI9341_BLACK); // Clear display.
 
 //display.AutoTuneSWR(0, 7100000);
-//    display.PowerStepDdsCirRelay(true, 0, true, false);
+
 //    stepper.ResetStepperToZero();
 
   // Run initial tests if hardware has not been accepted.

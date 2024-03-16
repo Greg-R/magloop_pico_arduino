@@ -31,6 +31,7 @@
 #pragma once
 //#include "pico/stdlib.h"
 //#include "hardware/adc.h"
+#include <Arduino.h>
 
 class SWR
 {
