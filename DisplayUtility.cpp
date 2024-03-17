@@ -303,9 +303,9 @@ int DisplayUtility::DetectMaxSwitch()
     for (int i = 0; i < 10; i++)
     {
       updateMessageTop("                  Upper Limit Hit!");
-      busy_wait_ms(1000);
+      delay(1000);
       tft.fillRect(90, 0, 300, 20, ILI9341_BLACK);
-      busy_wait_ms(1000);
+      delay(1000);
     }
     return 1;
   }
@@ -537,7 +537,7 @@ void DisplayUtility::PowerStepDdsCirRelay(bool stepperPower, uint32_t frequency,
   // gpio_put(data.OPAMPPOWER, circuitPower);
   // gpio_put(data.RFAMPPOWER, circuitPower);
   // gpio_put(data.RFRELAYPOWER, relayPower);
-  busy_wait_ms(500); //  Wait for relay to switch and DDS to stabilize.
+  delay(500); //  Wait for relay to switch and DDS to stabilize.
 }
 
 void DisplayUtility::menuEncoderPoll()

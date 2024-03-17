@@ -178,6 +178,8 @@ Serial2.begin(115200, SERIAL_8N1);
   // Power on all circuits except stepper and relay.  This is done early to allow circuits to stabilize before calibration.
   display.PowerStepDdsCirRelay(false, 7000000, true, false);
 
+  EEPROM.begin(256);
+
   //eeprom.begin(256);               //  1 FLASH page which is 256 bytes.  Not sure this is required if using get and put methods.
                                    //  Now read the struct from Flash which is read into the Data object.
   EEPROM.get(0, data.workingData); // Read the workingData struct from EEPROM.
@@ -188,7 +190,7 @@ Serial2.begin(115200, SERIAL_8N1);
   {
     data.writeDefaultValues(); //  Writes default values in to the dataStruct in the Data object.
     EEPROM.put(0, data.workingData);
-  //  eeprom.commit();
+    EEPROM.commit();
     EEPROM.get(0, data.workingData); // Read the workingData struct from EEPROM.
   }
 
@@ -199,7 +201,7 @@ Serial2.begin(115200, SERIAL_8N1);
 //  display.PowerStepDdsCirRelay(true, 7000000, true, false);
   // Show "Splash" screen for 5 seconds.  This also allows circuits to stabilize.
   display.Splash(data.version, data.releaseDate);
-  busy_wait_ms(5000);
+  delay(5000);
   tft.fillScreen(ILI9341_BLACK); // Clear display.
 
 //display.AutoTuneSWR(0, 7100000);
@@ -218,7 +220,7 @@ Serial2.begin(115200, SERIAL_8N1);
     {
       data.workingData.hardware = 0x55555555;
       EEPROM.put(0, data.workingData);
-    //  eeprom.commit(); // Write to EEPROM.
+      EEPROM.commit(); // Write to EEPROM.
     }
     if (bypassTest == 0)
     {
@@ -252,7 +254,7 @@ Serial2.begin(115200, SERIAL_8N1);
 
   display.menuIndex = display.TopMenuState::FREQMENU; // Begin in Frequency menu.
 
-  analogReadResolution(10);
+  analogReadResolution(12);
 }
 
   // Main loop state machine:

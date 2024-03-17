@@ -88,13 +88,11 @@ void StepperManagement::MoveStepperToPosition(int32_t position)
      // Cut power to halt controller.
      //PowerStepDdsCirRelay(false, 0, false, false);  // !!!
      return;
-     //busy_wait_ms(3000);
-     //EraseBelowMenu();
      }
      if(data.zeroclose) {
      EraseBelowMenu();
      updateMessageMiddle("            Zero switch was closed");
-     busy_wait_ms(3000);
+     delay(3000);
      EraseBelowMenu();
      }     
 }

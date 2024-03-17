@@ -155,7 +155,7 @@ void TuneInputs::SelectParameter()
         }
         lastexitbutton = true;  // Prevents exit button from skipping a level.
         EEPROM.put(0, data.workingData);  // Save parameters to EEPROM.
-        //eeprom.commit();
+        EEPROM.commit();
         //  Need to refresh graphics, because they were changed by ChangeFrequency!
         state = State::state0; // Refresh the graphics.
       }

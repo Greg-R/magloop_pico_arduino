@@ -125,14 +125,14 @@ void DisplayManagement::frequencyMenuOption()
       data.workingData.currentFrequency = frequency;
       data.workingData.lastFreq[whichBandOption] = frequency;
       EEPROM.put(0, data.workingData);
-      //eeprom.commit(); // Write to EEPROM.
+      EEPROM.commit(); // Write to EEPROM.
       tft.fillRect(0, 100, 311, 150, ILI9341_BLACK); // ???
       minSWRAuto = AutoTuneSWR(whichBandOption, frequency); // Auto tune here
       // After AutoTune, do full update of display with SWR vs. frequency plot:
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
       GraphAxis(whichBandOption);
       PlotSWRValueNew(whichBandOption, iMax, tempCurrentPosition, tempSWR, SWRMinPosition);
-      busy_wait_ms(5000);
+      delay(5000);
       break; //  state is not changed; should go back to state2.
     }        // end switch
   }          // end of while loop and state machine
@@ -567,7 +567,7 @@ void DisplayManagement::DoFirstCalibrate()
   //  Set the calibrated flag in workingData.
   data.workingData.calibrated = 1;
   EEPROM.put(0, data.workingData);
-  //eeprom.commit(); // This writes a page to Flash memory.  This includes the position counts
+  EEPROM.commit(); // This writes a page to Flash memory.  This includes the position counts
                    // and preset frequencies.
   // Slopes can't be computed until the actual values are loaded from flash:
   data.computeSlopes();
@@ -648,7 +648,7 @@ void DisplayManagement::DoSingleBandCalibrate(int whichBandOption)
     position = data.workingData.bandLimitPositionCounts[whichBandOption][1] - 50;
   } // end for (j
   position = SWRFinalPosition + 50;
-  //eeprom.commit(); // Write values to EEPROM
+  EEPROM.commit(); // Write values to EEPROM
   updateMessageTop("                     Press Exit");
   updateMessageBottom("     Single Band Calibrate Complete");
   //PowerStepDdsCirRelay(false, 0, false, false); // !!!
@@ -708,12 +708,12 @@ void DisplayManagement::ProcessPresets()
     case State::state3: // Run AutoTuneSWR() at the selected preset frequency.
       this->data.workingData.currentFrequency = frequency;
       EEPROM.put(0, data.workingData);
-      //eeprom.commit();
+      EEPROM.commit();
       minSWRAuto = AutoTuneSWR(whichBandOption, data.workingData.currentFrequency);
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
       GraphAxis(whichBandOption);
       PlotSWRValueNew(whichBandOption, iMax, tempCurrentPosition, tempSWR, SWRMinPosition);
-      busy_wait_ms(5000);
+      delay(5000);
       state = State::state2; // Move to Select Preset state.
       break;
       default:  // Should never go here!
@@ -799,7 +799,7 @@ int DisplayManagement::SelectPreset()
         // Save the preset to the EEPROM.
         data.workingData.presetFrequencies[whichBandOption][submenuIndex] = frequency;
         EEPROM.put(0, data.workingData);
-        //eeprom.commit();
+        EEPROM.commit();
         //  Need to refresh graphics, because they were changed by ChangeFrequency!
         state = State::state0; // Refresh the graphics.
         //  lastenterbutton = enterbutton.pushed;
@@ -880,7 +880,7 @@ float DisplayManagement::AutoTuneSWR(uint32_t band, uint32_t frequency)
   // Power down all circuits except in calibrate mode.
   if (calFlag == false) {
     //  Power down the stepper before measuring VSWR!  Delay to allow TMC to slowly decrease motor hold current.
-    busy_wait_ms(1000);
+    delay(1000);
     PowerStepDdsCirRelay(false, frequency, true, true);  // Disengage stepper driver.  Leave circuits on to measure SWR.
     minSWR = swr.ReadSWRValue();                         // Measure VSWR in the final position.
   //  Now shut the rest of the circuits down.

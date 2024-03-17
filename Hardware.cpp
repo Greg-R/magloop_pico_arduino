@@ -51,6 +51,8 @@ void Hardware::SWR_Test()
   tft.print("SWR Bridge Test");
   //  Start the DDS:
   PowerStepDdsCirRelay(false, 7000000, true, false); // Activate SWR circuits.
+//  delay(1000);  // Let circuits stabilize.
+//  swr.ReadADCoffsets();  // Measure ADC offsets.
   float swrValue;
   tft.setTextSize(1);
   for (int i = 0; i < swrArray.size(); i++)
@@ -254,12 +256,12 @@ void Hardware::MotorTest()
     tft.setFont(&FreeSerif12pt7b);
     tft.print("Move motor towards max");
     stepper.MoveStepperToPosition(1500);
-    busy_wait_ms(1000);
+    delay(1000);
     tft.fillRect(10, 74, 300, 20, ILI9341_BLACK);
     tft.setCursor(10, 90);
     tft.print("Return towards zero");
     stepper.MoveStepperToPosition(-1500);
-    busy_wait_ms(1000);
+    delay(1000);
     tft.fillRect(10, 74, 300, 20, ILI9341_BLACK);
   }                                             // while(1)  (end of main loop)
   PowerStepDdsCirRelay(false, 0, false, false); // Deactivate motor circuit.
