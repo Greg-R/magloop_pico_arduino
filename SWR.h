@@ -47,5 +47,5 @@ public:
 
    float ReadSWRValue();
 
-   float ReadNewSWRValue();
+//   float ReadNewSWRValue();
 };

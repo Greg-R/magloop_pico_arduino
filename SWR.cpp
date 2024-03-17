@@ -29,7 +29,6 @@
 */
 
 #include "SWR.h"
-//#include <Arduino.h>
 
 
 SWR::SWR()
@@ -50,13 +49,13 @@ void SWR::ReadADCoffsets()
 {
   delay(1000);
 //  adc_select_input(2);
-  ground_offset = analogRead(2); // Read the shorted input.
+  ground_offset = analogRead(28); // Read the shorted input.
   delay(1000);
 //  adc_select_input(0);
-reverse_offset = analogRead(0) - ground_offset; // Subtract the ground offset.
+reverse_offset = analogRead(26) - ground_offset; // Subtract the ground offset.
   delay(1000);
 //  adc_select_input(1);
-  forward_offset = analogRead(1) - ground_offset;
+  forward_offset = analogRead(27) - ground_offset;
   return;
 }
 
@@ -84,12 +83,12 @@ float SWR::ReadSWRValue()
   float VSWR;
   for (i = 0; i < MAXPOINTSPERSAMPLE; i++)
   { // Take multiple samples at each frequency
-//    busy_wait_ms(20);
+    delay(20);
 //    adc_select_input(1);
-    sum[0] += (float)(analogRead(1) - ground_offset); // - (float) forward_offset;  // Read forward voltage, subtract ground offset.
-//    busy_wait_ms(20);
+    sum[0] += (float)(analogRead(27) - ground_offset); // - (float) forward_offset;  // Read forward voltage, subtract ground offset.
+    delay(20);
 //    adc_select_input(0);
-    sum[1] += (float)(analogRead(0) - ground_offset); // - (float) reverse_offset;  // Read reverse voltage, subtract ground offset.
+    sum[1] += (float)(analogRead(26) - ground_offset); // - (float) reverse_offset;  // Read reverse voltage, subtract ground offset.
   }
   forward_voltage = sum[0] / (float)MAXPOINTSPERSAMPLE - (float)forward_offset;
   reverse_voltage = sum[1] / (float)MAXPOINTSPERSAMPLE - (float)reverse_offset;
@@ -121,7 +120,7 @@ float SWR::ReadSWRValue()
   void
   return (VSWR)
 
-*****/
+*****
 float SWR::ReadNewSWRValue()
 {
   int i;
@@ -148,3 +147,4 @@ float SWR::ReadNewSWRValue()
 
   return (VSWR);
 }
+*/

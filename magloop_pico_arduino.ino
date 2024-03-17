@@ -28,7 +28,7 @@
     GNU General Public License for more details.
 */
 // #define PICO_STACK_SIZE _u(0x1000)  // Uncomment if stack gets blown.  This doubles stack size.//
-#include "pico/stdlib.h"
+//#include "pico/stdlib.h"
 //#include "hardware/spi.h"
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <SPI.h>
@@ -251,6 +251,8 @@ Serial2.begin(115200, SERIAL_8N1);
   // display.PowerStepDdsCirRelay(false, 7000000, true, false);
 
   display.menuIndex = display.TopMenuState::FREQMENU; // Begin in Frequency menu.
+
+  analogReadResolution(10);
 }
 
   // Main loop state machine:

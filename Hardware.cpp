@@ -71,12 +71,12 @@ void Hardware::SWR_Test()
     // Read and print forward ADC integer.
     //adc_select_input(1);
     tft.setCursor(225, dataCoorY + 30);
-        tft.print(analogRead(1));
+        tft.print(analogRead(27));
     // Read and print reverse ADC integer.
     //adc_select_input(0);
     tft.setCursor(225, dataCoorY + 60);
-    tft.print(analogRead(0));
-    busy_wait_ms(1000);
+    tft.print(analogRead(26));
+    delay(1000);
     // Blank out old readings
     tft.fillRect(120, dataCoorY - 17, 70, 20, ILI9341_BLACK);
     tft.fillRect(225, dataCoorY + 30 - 17, 60, 20, ILI9341_BLACK);
