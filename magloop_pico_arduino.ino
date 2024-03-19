@@ -78,14 +78,7 @@
   Button exitbutton = Button(data.exitButton);
 
   //  Instantiate the display object.  Note that the SPI is handled in the display object.
-  //Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_CS, DISP_DC, -1);
-//  Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
-//    Adafruit_ILI9341 tft = Adafruit_ILI9341(&SPI1, TFT_CS, TFT_DC, -1);
-    Adafruit_ILI9341 tft = Adafruit_ILI9341(&SPI1, 16, 13, -1);
-
-  //  Instantiate the EEPROM object, which is actually composed of FLASH.
-  //EEPROMClass eeprom = EEPROMClass();
-  //  Read the EEPROM and update the Data object.
+  Adafruit_ILI9341 tft = Adafruit_ILI9341(&SPI1, 16, 13, -1);
 
   //  Next instantiate the DDS.
   DDS dds = DDS(data.DDS_RST, data.DDS_DATA, data.DDS_FQ_UD, data.WLCK);
@@ -112,47 +105,28 @@
 {                         
   // Initialize stepper and limit switch GPIOs:
 
-//  gpio_set_function(0, GPIO_FUNC_SIO); // Stepper Step
-  pinMode(0, OUTPUT);
-//  gpio_set_function(1, GPIO_FUNC_SIO); // Stepper Dir
-  pinMode(1, OUTPUT);
+  pinMode(0, OUTPUT); // Stepper Step
+  pinMode(1, OUTPUT); // Stepper Dir
   pinMode(2, OUTPUT); // RF Amp Power
   pinMode(3, OUTPUT); // Op Amp Power
 
-//  gpio_set_function(10, GPIO_FUNC_SIO); // Limit switch
-  pinMode(10, INPUT_PULLUP);
-//  gpio_set_function(11, GPIO_FUNC_SIO); // Limit switch
-  pinMode(11, INPUT_PULLUP);
+  pinMode(10, INPUT_PULLUP); // Limit switch
+  pinMode(11, INPUT_PULLUP); // Limit switch
   pinMode(19, OUTPUT); // RF relay
 
-  //gpio_set_dir(0, GPIO_OUT); // Stepper Step
-  //gpio_set_dir(1, GPIO_OUT); // Stepper Dir
-
-  //gpio_set_dir(2, GPIO_OUT); // RF Amp Power
   digitalWrite(2, LOW);        // RF Amp Power off
-  //gpio_set_dir(3, GPIO_OUT); // Op Amp Power
   digitalWrite(3, LOW);        // Op Amp Power off
+  digitalWrite(19, LOW);       // RR relay off
 
-  //gpio_set_dir(10, GPIO_IN);  // Limit switch
-  //gpio_set_dir(11, GPIO_IN);  // Limit switch
-  //gpio_set_dir(19, GPIO_OUT); // RF Relay
-  digitalWrite(19, LOW);
-  //  The limit switch inputs need pull-ups:
-  //(10);
-  //gpio_pull_up(11);
-
-//bool setRX(pin_size_t pin);
+// Configure SPI1
 SPI1.setCS(13);
 SPI1.setSCK(14);
 SPI1.setTX(15);
 SPI1.setRX(12);
 SPI1.begin(true);
 
-// UART setup:
-//Serial2.setRX(pin);
+// UART setup.  Only the transmit is used.
 Serial2.setTX(8);
-//Serial2.setRTS(pin);
-//Serial2.setCTS(pin);
 Serial2.begin(115200, SERIAL_8N1);
 
   // Designate GPIO8 as UART1 transmit.
@@ -178,11 +152,9 @@ Serial2.begin(115200, SERIAL_8N1);
   // Power on all circuits except stepper and relay.  This is done early to allow circuits to stabilize before calibration.
   display.PowerStepDdsCirRelay(false, 7000000, true, false);
 
+  // Start the EEPROM and read the workingData struct into working memory.
   EEPROM.begin(256);
-
-  //eeprom.begin(256);               //  1 FLASH page which is 256 bytes.  Not sure this is required if using get and put methods.
-                                   //  Now read the struct from Flash which is read into the Data object.
-  EEPROM.get(0, data.workingData); // Read the workingData struct from EEPROM.
+  EEPROM.get(0, data.workingData);
 
   //  Now examine the data in the buffer to see if the EEPROM should be initialized.
   //  There is a specific number written to the EEPROM when it is initialized.

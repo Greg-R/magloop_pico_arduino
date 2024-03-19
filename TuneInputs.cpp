@@ -30,9 +30,9 @@
 
 #include "TuneInputs.h"
 
-TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &enterbutton, 
+TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &enterbutton,  
                        Button &autotunebutton, Button &exitbutton, TmcStepper &tmcstepper)
-                     : DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), data(data),
+                     : data(data), DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), // data(data), Does order of initialization make a difference in this case?
                        enterbutton(enterbutton), autotunebutton(autotunebutton), exitbutton(exitbutton), tmcstepper(tmcstepper)
 {
   parameters[0] = data.workingData.zero_offset;
