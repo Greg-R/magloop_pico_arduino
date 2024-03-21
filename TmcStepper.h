@@ -43,6 +43,8 @@ public:
 //                                                                                                     ^^FREEWHEEL 
 TmcStepper();
 
+void initialize();
+
 uint8_t calcCRC(std::array<uint8_t, 8> datagram);
 
 const uint8_t* getCommand(std::array<uint8_t, 8>& datagram);

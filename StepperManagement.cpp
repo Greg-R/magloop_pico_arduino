@@ -34,11 +34,16 @@ StepperManagement::StepperManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr, 
                                      DisplayUtility(tft, dds, swr, data, tmcstepper), data(data), tmcstepper(tmcstepper)
 {
   // position = 2500;          // Default to approximately midrange.
+
+}
+
+void StepperManagement::initialize() {
   rotation = -1;
   setCurrentPosition(5000);                //
   setAcceleration(data.workingData.accel); // Acceleration needs to be set high, with maximum speed limit.
   setSpeed(data.workingData.speed);
   setMaxSpeed(data.workingData.speed);
+//  tmcstepper.initialize();
 }
 
 // Revised version which includes ZEROSWITCH and MAXSWITCH detection.

@@ -47,18 +47,18 @@
 
 //#define PIN_CS  13
 //#define DISP_DC 16
-#define SPI_PORT spi1
+//#define SPI_PORT spi1
 //#define PIN_MISO 16  MISO not used
-#define PIN_CS   13
-#define PIN_SCK  14
-#define PIN_MOSI 15
-#define DISP_DC 16  //  P2 changed from 19 to 16.
+//#define PIN_CS   13
+//#define PIN_SCK  14
+//#define PIN_MOSI 15
+//#define DISP_DC 16  //  P2 changed from 19 to 16.
 
-#define TFT_CS    13      // TFT CS  pin is connected to arduino pin 8
-#define TFT_RST   9      // TFT RST pin is connected to arduino pin 9
-#define TFT_DC    16     // TFT DC  pin is connected to arduino pin 10
-#define TFT_MOSI  15
-#define TFT_SCLK  14
+//#define TFT_CS    13      // TFT CS  pin is connected to arduino pin 8
+//#define TFT_RST   9      // TFT RST pin is connected to arduino pin 9
+//#define TFT_DC    16     // TFT DC  pin is connected to arduino pin 10
+//#define TFT_MOSI  15
+//#define TFT_SCLK  14
 //#define TFT_MISO  0
 
   int currentFrequency;
@@ -70,7 +70,6 @@
   //  The data object manages constants and variables involved with frequencies, stepper motor positions,
   //  and GPIOs.
   Data data = Data();
-//  Data data;
 
   //  Construct and initialize buttons.
   Button enterbutton = Button(data.enterButton);
@@ -127,7 +126,15 @@ SPI1.begin(true);
 
 // UART setup.  Only the transmit is used.
 Serial2.setTX(8);
-Serial2.begin(115200, SERIAL_8N1);
+Serial2.setPollingMode(true);
+//Serial2.begin(115200, SERIAL_8N1);
+Serial2.begin(115200);
+  // Slopes can't be computed until the actual values are loaded from FLASH:
+  data.computeSlopes();
+
+  // Start the EEPROM and read the workingData struct into working memory.
+  EEPROM.begin(256);
+  EEPROM.get(0, data.workingData);
 
   // Designate GPIO8 as UART1 transmit.
 //  gpio_set_function(8, GPIO_FUNC_UART); // UART1 TX
@@ -143,6 +150,16 @@ Serial2.begin(115200, SERIAL_8N1);
   exitbutton.initialize();
   autotunebutton.initialize();
 
+  tmcstepper.initialize();
+  swr.ReadADCoffsets();  // To initialize; this is repeated later when the circuits are more thermally stable.
+
+stepper.initialize();
+stepper.setCurrentPosition(0);
+stepper.MoveStepperToPosition(1000);
+//display.PowerStepDdsCirRelay(true, 7000000, true, false);
+//stepper.ResetStepperToZero();
+//delay(30000);
+
   //  Configure the display object.
   tft.initSPI();
   tft.begin();
@@ -151,10 +168,6 @@ Serial2.begin(115200, SERIAL_8N1);
 
   // Power on all circuits except stepper and relay.  This is done early to allow circuits to stabilize before calibration.
   display.PowerStepDdsCirRelay(false, 7000000, true, false);
-
-  // Start the EEPROM and read the workingData struct into working memory.
-  EEPROM.begin(256);
-  EEPROM.get(0, data.workingData);
 
   //  Now examine the data in the buffer to see if the EEPROM should be initialized.
   //  There is a specific number written to the EEPROM when it is initialized.
@@ -166,8 +179,7 @@ Serial2.begin(115200, SERIAL_8N1);
     EEPROM.get(0, data.workingData); // Read the workingData struct from EEPROM.
   }
 
-  // Slopes can't be computed until the actual values are loaded from FLASH:
-  data.computeSlopes();
+
 
   dds.DDSWakeUp(); // This resets the DDS, and it will have no output.
 //  display.PowerStepDdsCirRelay(true, 7000000, true, false);

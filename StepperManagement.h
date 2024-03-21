@@ -54,6 +54,8 @@ public:
 
    StepperManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr, Data &data, TmcStepper &tmcstepper, AccelStepper::MotorInterfaceType interface, uint8_t pin1 = 2, uint8_t pin2 = 3, uint8_t pin3 = 4, uint8_t pin4 = 5, bool enable = true);
 
+void initialize();
+
    void MoveStepperToPosition(int32_t position);
 
    void ResetStepperToZero();
