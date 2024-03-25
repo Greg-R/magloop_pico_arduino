@@ -127,6 +127,8 @@ Serial2.begin(115200);
   // Start the EEPROM and read the workingData struct into working memory.
   EEPROM.begin(256);
 
+  EEPROM.get(0, data.workingData); // Read the workingData struct from EEPROM.
+
     //  Now examine the data in the buffer to see if the EEPROM should be initialized.
   //  There is a specific number written to the EEPROM when it is initialized.
   if (data.workingData.initialized != 0x55555555)
@@ -147,30 +149,7 @@ Serial2.begin(115200);
   swr.ReadADCoffsets();  // To initialize; this is repeated later when the circuits are more thermally stable.
  // display.PowerStepDdsCirRelay(true, 7000000, true, true);
 
-
 stepper.initialize();
-//Serial2.write(tmcstepper.tmcDriverPower(true), 8);
-//stepper.setSpeed(100);
-//delay(5000);
-//stepper.setCurrentPosition(5000);
-//bullshit = stepper.currentPosition();
-//stepper.MoveStepperToPosition(5050);
-//bullshit = stepper.currentPosition();
-//delay(5000);
-//stepper.runToNewPosition(6000);
-//delay(2000);
-//stepper.runToNewPosition(5000);
-//delay(1000);
-//stepper.MoveStepperToPosition(6000);
-//stepper.ResetStepperToZero();
-//stepper.ResetStepperToZero();
-//stepper.MoveStepperToPosition(0);
-//stepper.MoveStepperToPosition(1000);
-//stepper.MoveStepperToPosition(-1000);
-
-//display.PowerStepDdsCirRelay(true, 7000000, true, false);
-//stepper.ResetStepperToZero();
-//delay(30000);
 
 //    Configure the display object.
   tft.initSPI();
@@ -187,10 +166,6 @@ stepper.initialize();
   display.Splash(data.version, data.releaseDate);
   delay(5000);
   tft.fillScreen(ILI9341_BLACK); // Clear display.
-
-//display.AutoTuneSWR(0, 7100000);
-
-//    stepper.ResetStepperToZero();
 
   // Run initial tests if hardware has not been accepted.
   if (data.workingData.hardware != 0x55555555)
