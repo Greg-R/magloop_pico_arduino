@@ -61,6 +61,7 @@ public:
     Button &enterbutton;
     Button &autotunebutton;
     Button &exitbutton;
+    SWR& swr;
     TmcStepper &tmcstepper;
     int whichBandOption;  // This indicates the current band in use.
     float SWRValue;
@@ -83,7 +84,7 @@ public:
     State state;
 
     TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &enterbutton,
-               Button &autotunebutton, Button &exitbutton, TmcStepper &tmcstepper);
+               Button &autotunebutton, Button &exitbutton, SWR& swr, TmcStepper &tmcstepper);
 
     void SelectParameter();
 

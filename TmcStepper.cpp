@@ -25,7 +25,7 @@ TmcStepper::TmcStepper() {
 
 void TmcStepper::initialize() {
 Serial2.write(getCommand(forward), 8);
-  tmcConfig = stepsize016;
+tmcConfig = stepsize016;
 Serial2.write(tmcDriverPower(false), 8);
 Serial2.write(getCommand(powerBrakingConfig), 8);
 Serial2.write(getCommand(iHoldiRun), 8);

@@ -65,5 +65,5 @@ public:
 
     void PlotNewStartingFrequency(int whichBandOption);
 
-    void PlotSWRValueNew(int whichBandOption, int iMax, std::vector<int32_t>& tempCurrentPosition, std::vector<float>& tempSWR, int32_t SWRMinPosition);
+    void PlotSWRValueNew(int whichBandOption, std::vector<int32_t>& tempCurrentPosition, std::vector<float>& tempSWR, int32_t SWRMinPosition);
 };

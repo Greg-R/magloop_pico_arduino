@@ -48,10 +48,11 @@ void GraphPlot::GraphAxis(int whichBandOption) // al modified 9-8-19
   tft.setFont(&FreeSerif9pt7b);
   char buff[10];
   int chunks, tickCount;
-  int yTick, xTick, yDotIncrement, xDotIncrement;
-  int tcolor, bcolor;
+  int yTick, xTick, xDotIncrement;
+  //int tcolor, bcolor;
   int i, k;
-  float freqCount, freqEnd, pip;
+  float freqCount, freqEnd;
+  float pip = 0.0;
   //  This needs update to use band limit variables, not hard coded???
   switch (whichBandOption)
   {
@@ -81,8 +82,8 @@ void GraphPlot::GraphAxis(int whichBandOption) // al modified 9-8-19
     xIncrement = (XAXISEND * (.3 / .35) - XAXISSTART) / chunks;
     break;
   }
-  tcolor = ILI9341_YELLOW;
-  bcolor = ILI9341_BLACK;
+  //tcolor = ILI9341_YELLOW;
+  //bcolor = ILI9341_BLACK;
   tickCount = 4;
   tft.fillRect(0, 47, PIXELWIDTH, PIXELHEIGHT, ILI9341_BLACK);
   tft.drawLine(XAXISSTART, YAXISSTART, XAXISSTART, YAXISEND, ILI9341_DARKGREY);     // Solid Y axis Left side  OK 9-8-19
@@ -159,15 +160,15 @@ void GraphPlot::GraphAxis(int whichBandOption) // al modified 9-8-19
 *****/
 void GraphPlot::PlotNewStartingFrequency(int whichBandOption)
 {
-  int delta, tickCount;
-  int x, y;
-  long highEnd, lowEnd, midPoint;
-  float freqCount;
+  //int delta, tickCount;
+  int x;
+  long highEnd, lowEnd;
+  //float freqCount;
   float HzPerPix;
   switch (whichBandOption)
   {
   case 0:
-    freqCount = static_cast<float>(data.LOWEND40M) / 1000000.0;
+  //  freqCount = static_cast<float>(data.LOWEND40M) / 1000000.0;
     highEnd = data.HIGHEND40M;
     lowEnd = data.LOWEND40M;
     HzPerPix = static_cast<float>(highEnd - lowEnd) / float(XAXISEND - XAXISSTART);
@@ -175,14 +176,14 @@ void GraphPlot::PlotNewStartingFrequency(int whichBandOption)
 
     break;
   case 1:
-    freqCount = static_cast<float>(data.LOWEND30M) / 1000000.0;
+  //  freqCount = static_cast<float>(data.LOWEND30M) / 1000000.0;
     highEnd = data.HIGHEND30M;
     lowEnd = data.LOWEND30M;
     HzPerPix = static_cast<float>(highEnd - lowEnd) / float(XAXISEND - XAXISSTART);
     x = 25 + static_cast<float>(dds.currentFrequency - lowEnd) / HzPerPix;
     break;
   case 2:
-    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
+  //  freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
     highEnd = data.HIGHEND20M;
     lowEnd = data.LOWEND20M;
     HzPerPix = static_cast<float>(highEnd - lowEnd) / float(XAXISEND - XAXISSTART);
@@ -206,9 +207,9 @@ void GraphPlot::PlotNewStartingFrequency(int whichBandOption)
   Return value:
     void
 *****/
-void GraphPlot::PlotSWRValueNew(int whichBandOption, int iMax, std::vector<int32_t>& tempCurrentPosition, std::vector<float>& tempSWR, int32_t SWRMinPosition)
+void GraphPlot::PlotSWRValueNew(int whichBandOption, std::vector<int32_t>& tempCurrentPosition, std::vector<float>& tempSWR, int32_t SWRMinPosition)
 {
-  float stepsPerPix;
+//  float stepsPerPix;
   int pixPerSWRUnit;
   float HzPerStep;
   float HzPerPix;
@@ -234,7 +235,7 @@ void GraphPlot::PlotSWRValueNew(int whichBandOption, int iMax, std::vector<int32
     break;
   }
   // This for loop plots the data to the axes.  The data is in the array tempSWR[i].
-  for (int i = 0; i < tempCurrentPosition.size(); i++)
+  for (unsigned int i = 0; i < tempCurrentPosition.size(); i++)
   {
     if (tempCurrentPosition[i] > 0 and tempSWR[i] < 3)
     {
@@ -242,7 +243,7 @@ void GraphPlot::PlotSWRValueNew(int whichBandOption, int iMax, std::vector<int32
       currentFrequencyDiff = float(tempCurrentPosition[i] - SWRMinPosition) * HzPerStep;
       plotFreq = (dds.currentFrequency + currentFrequencyDiff);
       HzPerPix = static_cast<float>(freqEnd - freqStart) / float(XAXISEND - XAXISSTART);
-      stepsPerPix = static_cast<float>(data.workingData.bandLimitPositionCounts[whichBandOption][1] - data.workingData.bandLimitPositionCounts[whichBandOption][0]) / (XAXISEND - XAXISSTART);
+//      stepsPerPix = static_cast<float>(data.workingData.bandLimitPositionCounts[whichBandOption][1] - data.workingData.bandLimitPositionCounts[whichBandOption][0]) / (XAXISEND - XAXISSTART);
       pixPerSWRUnit =static_cast<float>(YAXISEND - YAXISSTART) / 3;
       int xposition = 27 + static_cast<float>(plotFreq - freqStart) / HzPerPix;
       int yposition = YAXISSTART + (4 - tempSWR[i]) * pixPerSWRUnit;

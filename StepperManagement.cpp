@@ -43,6 +43,8 @@ void StepperManagement::initialize() {
   setAcceleration(data.workingData.accel); // Acceleration needs to be set high, with maximum speed limit.
   setSpeed(data.workingData.speed);
   setMaxSpeed(data.workingData.speed);
+  pinMode(10, INPUT_PULLUP); // Limit switch
+  pinMode(11, INPUT_PULLUP); // Limit switch
 //  tmcstepper.initialize();
 }
 

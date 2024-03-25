@@ -114,7 +114,7 @@ public:
 
     int manualTune();
 
-    int32_t ChangeFrequency(int bandIndex, int32_t frequency);
+    int32_t ChangeFrequency(int32_t frequency);
 
     TopMenuState MakeMenuSelection(TopMenuState index);
 

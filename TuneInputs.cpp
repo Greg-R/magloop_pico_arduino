@@ -31,9 +31,9 @@
 #include "TuneInputs.h"
 
 TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &enterbutton,  
-                       Button &autotunebutton, Button &exitbutton, TmcStepper &tmcstepper)
-                     : data(data), DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), // data(data), Does order of initialization make a difference in this case?
-                       enterbutton(enterbutton), autotunebutton(autotunebutton), exitbutton(exitbutton), tmcstepper(tmcstepper)
+                       Button &autotunebutton, Button &exitbutton, SWR& swr, TmcStepper &tmcstepper)
+                     :  DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), data(data), // data(data), Does order of initialization make a difference in this case?
+                       enterbutton(enterbutton), autotunebutton(autotunebutton), exitbutton(exitbutton), swr(swr), tmcstepper(tmcstepper)
 {
   parameters[0] = data.workingData.zero_offset;
   parameters[1] = data.workingData.backlash;
@@ -50,7 +50,7 @@ TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &ente
 // Exit saves and moves back up to the Calibrate menu.
 void TuneInputs::SelectParameter()
 {
-  int frequency;
+//  int frequency;
   bool lastexitbutton = true;
   bool lastenterbutton = true;
   int32_t parameter;
@@ -188,17 +188,17 @@ void TuneInputs::SelectParameter()
 *****/
 int32_t TuneInputs::ChangeParameter(int32_t frequency) // Al Mod 9-8-19
 {
-  int32_t i, changeDigit, digitSpacing, halfScreen, incrementPad, insetMargin, insetPad, offset;
-  int32_t defaultIncrement = 1;
-  int32_t cursorOffset = 0;
-  insetPad = 57; // Used to align digit indicator
-  incrementPad = 05;
-  digitSpacing = 28;
+  int32_t halfScreen, insetMargin;
+  //int32_t defaultIncrement = 1;
+  //int32_t cursorOffset = 0;
+  //insetPad = 57; // Used to align digit indicator
+  //incrementPad = 05;
+  //digitSpacing = 28;
   insetMargin = 15;
-  defaultIncrement = 1;
+  //defaultIncrement = 1;
   halfScreen = data.PIXELHEIGHT / 2 - 25;
-  bool lastexitbutton = true;
-  bool lastenterbutton = true;
+  //bool lastexitbutton = true;
+  //bool lastenterbutton = true;
   digitEncoderMovement = 0;
   menuEncoderMovement = 0;
   updateMessageTop("          Enter New Hardware Parameter");
