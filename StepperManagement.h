@@ -30,9 +30,9 @@
 
 #pragma once
 #include <stdint.h>
-#include "Arduino.h"
+#include <Arduino.h>
 //#include "pico/stdlib.h"
-#include "AccelStepper.h"
+#include <AccelStepper.h>
 #include "DisplayUtility.h"
 #include "Button.h"
 #include "Data.h"

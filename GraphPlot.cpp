@@ -48,10 +48,12 @@ void GraphPlot::GraphAxis(int whichBandOption) // al modified 9-8-19
   tft.setFont(&FreeSerif9pt7b);
   char buff[10];
   int chunks, tickCount;
-  int yTick, xTick, xDotIncrement;
+  int yTick, xTick; 
+  int xDotIncrement = 0;
   //int tcolor, bcolor;
   int i, k;
-  float freqCount, freqEnd;
+  float freqCount = 0;
+  float freqEnd = 0;
   float pip = 0.0;
   //  This needs update to use band limit variables, not hard coded???
   switch (whichBandOption)
@@ -161,7 +163,7 @@ void GraphPlot::GraphAxis(int whichBandOption) // al modified 9-8-19
 void GraphPlot::PlotNewStartingFrequency(int whichBandOption)
 {
   //int delta, tickCount;
-  int x;
+  int x = 0;
   long highEnd, lowEnd;
   //float freqCount;
   float HzPerPix;
@@ -215,8 +217,8 @@ void GraphPlot::PlotSWRValueNew(int whichBandOption, std::vector<int32_t>& tempC
   float HzPerPix;
   float currentFrequencyDiff;
   float plotFreq;
-  long freqStart;
-  long freqEnd;
+  long freqStart = 0;
+  long freqEnd = 0;
   switch (whichBandOption)
   { // This should use Data object to get band limits???
   case 0:

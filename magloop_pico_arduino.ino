@@ -144,22 +144,24 @@ Serial2.begin(115200);
 
   tmcstepper.initialize();
   swr.ReadADCoffsets();  // To initialize; this is repeated later when the circuits are more thermally stable.
-  display.PowerStepDdsCirRelay(true, 7000000, true, true);
+ // display.PowerStepDdsCirRelay(true, 7000000, true, true);
 
 
 stepper.initialize();
-stepper.setSpeed(100);
+//Serial2.write(tmcstepper.tmcDriverPower(true), 8);
+//stepper.setSpeed(100);
 //delay(5000);
-stepper.setCurrentPosition(5000);
+//stepper.setCurrentPosition(5000);
 //bullshit = stepper.currentPosition();
 //stepper.MoveStepperToPosition(5050);
 //bullshit = stepper.currentPosition();
 //delay(5000);
-stepper.runToNewPosition(6000);
+//stepper.runToNewPosition(6000);
 //delay(2000);
-stepper.runToNewPosition(5000);
-delay(2000);
-stepper.ResetStepperToZero();
+//stepper.runToNewPosition(5000);
+//delay(1000);
+//stepper.MoveStepperToPosition(6000);
+//stepper.ResetStepperToZero();
 //stepper.ResetStepperToZero();
 //stepper.MoveStepperToPosition(0);
 //stepper.MoveStepperToPosition(1000);
@@ -169,7 +171,7 @@ stepper.ResetStepperToZero();
 //stepper.ResetStepperToZero();
 //delay(30000);
 
-  //  Configure the display object.
+//    Configure the display object.
   tft.initSPI();
   tft.begin();
   tft.setRotation(3);
@@ -190,7 +192,7 @@ stepper.ResetStepperToZero();
 //    stepper.ResetStepperToZero();
 
   // Run initial tests if hardware has not been accepted.
-  if (data.workingData.hardware != 0x55555550)
+  if (data.workingData.hardware != 0x55555555)
   {
     display.updateMessageTop("Hardware Tests in Progress");
     //  Bypass tests by using MENU encoder.
@@ -240,7 +242,7 @@ stepper.ResetStepperToZero();
   // Main loop state machine:
 //  while (true)
 void loop(){
-  
+ 
     // tuneInputs.SelectParameter();
     //  testArray.EncoderTest();
     // testArray.UserNumericInput2(enterbutton, exitbutton, 7000000);
@@ -269,6 +271,6 @@ void loop(){
       display.menuIndex = display.TopMenuState::FREQMENU;
       break;
     } // switch (menuIndex)
-    
+  
   }   // end of loop()
 

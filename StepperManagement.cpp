@@ -43,8 +43,8 @@ void StepperManagement::initialize() {
   setAcceleration(data.workingData.accel); // Acceleration needs to be set high, with maximum speed limit.
   setSpeed(data.workingData.speed);
   setMaxSpeed(data.workingData.speed);
-  pinMode(10, INPUT_PULLUP); // Limit switch
-  pinMode(11, INPUT_PULLUP); // Limit switch
+//  pinMode(10, INPUT_PULLUP); // Limit switch
+//  pinMode(11, INPUT_PULLUP); // Limit switch
 //  tmcstepper.initialize();
 }
 
@@ -74,6 +74,8 @@ void StepperManagement::MoveStepperToPosition(int32_t position)
     data.position = currentPosition();  // Write the current stepper position to the data object.
     // This code handles switch closures, both for calibration (zero), and maximum switch faults.
     if ((digitalRead(data.maxswitch) == false) or (digitalRead(data.zeroswitch) == false))
+//    if ((digitalRead(10) == LOW) or (digitalRead(11) == LOW))
+//      if ((digitalRead(10) == LOW) or (digitalRead(11) == LOW))
     {
       // Set flag while switch is still closed.
       if (digitalRead(data.maxswitch) == false)
