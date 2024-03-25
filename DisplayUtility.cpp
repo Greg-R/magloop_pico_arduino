@@ -323,12 +323,12 @@ This is useful in some contexts where you want to always accept the entry.
 
 int32_t DisplayUtility::UserNumericInput(Button buttonAccept, Button buttonReject, int32_t number)
 {
-  int32_t i, changeDigit, digitSpacing, halfScreen, incrementPad, insetMargin, insetPad, offset, cursorHome;
+  int32_t digitSpacing, halfScreen, insetMargin, offset, cursorHome;
   int32_t defaultIncrement = 1;
   int32_t cursorOffset = 0;
   uint32_t numberSize;
-  insetPad = 57; // Used to align digit indicator
-  incrementPad = 05;
+//  insetPad = 57; // Used to align digit indicator
+//  incrementPad = 05;
   digitSpacing = 28;
   insetMargin = 15;
   defaultIncrement = 1;

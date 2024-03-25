@@ -30,7 +30,7 @@
 
 #include "StepperManagement.h"
 
-StepperManagement::StepperManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr, Data &data, TmcStepper &tmcstepper, AccelStepper::MotorInterfaceType interface, uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, bool enable) :AccelStepper(interface, pin1, pin2),
+StepperManagement::StepperManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr, Data &data, TmcStepper &tmcstepper, AccelStepper::MotorInterfaceType interface, uint8_t pin1, uint8_t pin2) :AccelStepper(interface, pin1, pin2),
                                      DisplayUtility(tft, dds, swr, data, tmcstepper), data(data), tmcstepper(tmcstepper)
 {
   // position = 2500;          // Default to approximately midrange.
@@ -139,7 +139,7 @@ void StepperManagement::ResetStepperToZero()
 *****/
 long StepperManagement::ConvertFrequencyToStepperCount(uint32_t presentFrequency)
 {
-  long count;
+  long count = 0;
   switch (data.workingData.currentBand)
   {
   case 40: //   intercept                  + slopeCoefficient * newFrequency

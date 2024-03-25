@@ -143,6 +143,7 @@ Serial2.begin(115200);
   autotunebutton.initialize();
 
   tmcstepper.initialize();
+  tuneInputs.initialize();
   swr.ReadADCoffsets();  // To initialize; this is repeated later when the circuits are more thermally stable.
  // display.PowerStepDdsCirRelay(true, 7000000, true, true);
 

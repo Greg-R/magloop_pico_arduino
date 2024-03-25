@@ -78,8 +78,8 @@ float SWR::ReadSWRValue()
   int i;
   float sum[2] = {0.0, 0.0};
 
-  float FWD = 0.0;
-  float REV = 0.0;
+//  float FWD = 0.0;
+//  float REV = 0.0;
   float VSWR;
   for (i = 0; i < MAXPOINTSPERSAMPLE; i++)
   { // Take multiple samples at each frequency

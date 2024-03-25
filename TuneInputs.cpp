@@ -35,6 +35,11 @@ TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &ente
                      :  DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), data(data), // data(data), Does order of initialization make a difference in this case?
                        enterbutton(enterbutton), autotunebutton(autotunebutton), exitbutton(exitbutton), swr(swr), tmcstepper(tmcstepper)
 {
+
+}
+
+void TuneInputs::initialize()
+{
   parameters[0] = data.workingData.zero_offset;
   parameters[1] = data.workingData.backlash;
   parameters[2] = data.workingData.coarse_sweep;
@@ -43,8 +48,6 @@ TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &ente
   parameterNames = {"Zero Offset", "Backlash", "Coarse Sweep", "Acceleration", "Speed"};
   submenuIndex = 0;
 }
-
-
 // Used in Hardware Settings to select a parameter.
 // If the Enter button is pressed, the hardware parameter can be changed and saved.
 // Exit saves and moves back up to the Calibrate menu.

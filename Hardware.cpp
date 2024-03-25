@@ -32,7 +32,7 @@
 
 Hardware::Hardware(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr, Button &enterbutton, Button &autotunebutton, Button &exitbutton, Data &data,
                    StepperManagement &stepper, TmcStepper &tmcstepper) : DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), dds(dds), swr(swr), enterbutton(enterbutton),
-                                                                         autotunebutton(autotunebutton), exitbutton(exitbutton), data(data), stepper(stepper), tmcstepper(tmcstepper)
+                                                                         autotunebutton(autotunebutton), exitbutton(exitbutton), data(data), tmcstepper(tmcstepper), stepper(stepper)
 {
   maxclose = false;
   zeroclose = false;
@@ -53,9 +53,9 @@ void Hardware::SWR_Test()
   PowerStepDdsCirRelay(false, 7000000, true, false); // Activate SWR circuits.
 //  delay(1000);  // Let circuits stabilize.
 //  swr.ReadADCoffsets();  // Measure ADC offsets.
-  float swrValue;
+//  float swrValue;
   tft.setTextSize(1);
-  for (int i = 0; i < swrArray.size(); i++)
+  for (unsigned int i = 0; i < swrArray.size(); i++)
   {
     tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
     tft.setFont(&FreeSerif12pt7b);
@@ -93,13 +93,13 @@ void Hardware::ButtonTest()
 {
   std::vector<std::string> buttons = {"Enter Button", "AutoTune Button", "Exit Button", "Zero Switch", "Max Switch"};
   EraseBelowMenu();
-  ; // Clear display.
+  // Clear display.
   tft.setTextColor(ILI9341_GREEN);
   tft.setFont(&FreeSerif9pt7b);
   tft.setCursor(titleCoorX, titleCoorY);
   tft.print("Button Test");
   // Draw the buttons/switches list.
-  for (int i = 0; i < buttons.size(); i++)
+  for (unsigned int i = 0; i < buttons.size(); i++)
   {
     tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
     tft.setFont(&FreeSerif12pt7b);
@@ -190,7 +190,7 @@ void Hardware::EncoderTest()
   tft.setFont(&FreeSerif9pt7b);
   tft.setCursor(titleCoorX, titleCoorY);
   tft.print("Encoder Test");
-  for (int i = 0; i < encoders.size(); i++)
+  for (unsigned int i = 0; i < encoders.size(); i++)
   {
     tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
     tft.setFont(&FreeSerif12pt7b);
@@ -278,10 +278,10 @@ void Hardware::InitialTests()
 
 void Hardware::SelectTest()
 {
-  int frequency;
+//  int frequency;
   bool lastexitbutton = true;
   bool lastenterbutton = true;
-  int32_t parameter;
+//  int32_t parameter;
 
   menuEncoderState = 0;
   state = State::state0; // Enter state0 which does graphics.
@@ -302,7 +302,7 @@ void Hardware::SelectTest()
       tft.setTextSize(1);
       tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
       // Show current hardware tests
-      for (int i = 0; i < tests.size(); i++)
+      for (unsigned int i = 0; i < tests.size(); i++)
       {
         tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
         tft.setFont(&FreeSerif12pt7b);
@@ -326,7 +326,7 @@ void Hardware::SelectTest()
       { // Turning clockwise
         RestorePreviousChoice(submenuIndex);
         submenuIndex++;
-        if (submenuIndex > (tests.size() - 1))
+        if ((unsigned)submenuIndex > (tests.size() - 1))
           submenuIndex = 0;
         HighlightNextChoice(submenuIndex);
         menuEncoderMovement = 0;
@@ -410,7 +410,7 @@ int Hardware::EncoderBypassTest()
   tft.setFont(&FreeSerif9pt7b);
   tft.setCursor(titleCoorX, titleCoorY);
   tft.print("Test Bypass");
-  for (int i = 0; i < encoders.size(); i++)
+  for (unsigned int i = 0; i < encoders.size(); i++)
   {
     tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
     tft.setFont(&FreeSerif12pt7b);
@@ -424,7 +424,7 @@ int Hardware::EncoderBypassTest()
   tft.print("to bypass tests or");
   tft.setCursor(dataCoorX, dataCoorY + 4 * 30); // 30 pixels vertical spacing.
   tft.print("wait for tests");
-  int freqEncoderCount = 0;
+//  int freqEncoderCount = 0;
   int menuEncoderCount = 0;
   tft.setTextColor(ILI9341_WHITE);
   tft.setCursor(dataCoorX + 180, dataCoorY);

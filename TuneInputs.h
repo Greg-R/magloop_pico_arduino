@@ -35,11 +35,11 @@
 #include <array>
 //#include "pico/stdlib.h"
 #include "Adafruit_ILI9341.h"
-#include "Arduino.h"
+#include <Arduino.h>
 #include "DDS.h"
 #include "SWR.h"
 #include "StepperManagement.h"
-#include "EEPROM.h"
+#include <EEPROM.h>
 #include "Data.h"
 #include "Button.h"
 #include "DisplayUtility.h"
@@ -85,6 +85,8 @@ public:
 
     TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &enterbutton,
                Button &autotunebutton, Button &exitbutton, SWR& swr, TmcStepper &tmcstepper);
+
+    void initialize();
 
     void SelectParameter();
 
