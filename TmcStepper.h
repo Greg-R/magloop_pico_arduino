@@ -43,7 +43,7 @@ public:
 //                                                                                                     ^^FREEWHEEL 
 TmcStepper();
 
-void initialize();
+void initialize(int rotation);
 
 uint8_t calcCRC(std::array<uint8_t, 8> datagram);
 

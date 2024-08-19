@@ -45,7 +45,8 @@ void TuneInputs::initialize()
   parameters[2] = data.workingData.coarse_sweep;
   parameters[3] = data.workingData.accel;
   parameters[4] = data.workingData.speed;
-  parameterNames = {"Zero Offset", "Backlash", "Coarse Sweep", "Acceleration", "Speed"};
+  parameters[5] = data.workingData.rotation;
+  parameterNames = {"Zero Offset", "Backlash", "Coarse Sweep", "Acceleration", "Speed", "Motor Rotation"};
   submenuIndex = 0;
 }
 // Used in Hardware Settings to select a parameter.
@@ -57,6 +58,7 @@ void TuneInputs::SelectParameter()
   bool lastexitbutton = true;
   bool lastenterbutton = true;
   int32_t parameter;
+  std::vector<std::string> rotations = {"Forward", "Reverse"};
   
   menuEncoderState = 0;
   state = State::state0; // Enter state0 which does graphics.
@@ -76,7 +78,7 @@ void TuneInputs::SelectParameter()
       tft.setTextSize(1); 
       tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK); 
       // Show current hardware parameters
-      for (int i = 0; i < 5; i++)
+      for (int i = 0; i < 6; i++)
       {
         tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
         tft.setFont(&FreeSerif12pt7b);
@@ -86,12 +88,12 @@ void TuneInputs::SelectParameter()
         tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
         tft.setCursor(65, 70 + i * 30);
         tft.print(parameterNames[i].c_str());
-        tft.setCursor(215, 70 + i * 30);
+        tft.setCursor(225, 70 + i * 30);
         tft.setFont(&FreeMono12pt7b);
         tft.print(parameters[i]);
       }
       tft.setTextColor(ILI9341_MAGENTA, ILI9341_WHITE);
-      tft.setCursor(215, 70 + submenuIndex * 30);
+      tft.setCursor(225, 70 + submenuIndex * 30);
       tft.print(parameters[submenuIndex]);  // Highlight selection.
       state = State::state1;
       break;
@@ -102,7 +104,7 @@ void TuneInputs::SelectParameter()
       { // Turning clockwise
         RestorePreviousChoice(submenuIndex);
         submenuIndex++;
-        if (submenuIndex > 4)
+        if (submenuIndex > 5)
           submenuIndex = 0;
         HighlightNextChoice(submenuIndex);
         menuEncoderMovement = 0;
@@ -112,7 +114,7 @@ void TuneInputs::SelectParameter()
         RestorePreviousChoice(submenuIndex);
         submenuIndex--;
         if (submenuIndex < 0)
-          submenuIndex = 4;
+          submenuIndex = 5;
         HighlightNextChoice(submenuIndex);
         menuEncoderMovement = 0;
       }
@@ -153,9 +155,25 @@ void TuneInputs::SelectParameter()
             data.workingData.speed = parameter;
             parameters[4] = parameter;
             break;
+
+            case 5:
+            parameter = data.workingData.rotation;
+            parameter = ChangeParameter(parameter);
+            data.workingData.rotation = parameter;
+            parameters[5] = parameter;
+
+          //  if (enterbutton.pushed & not lastenterbutton) {
+          //  data.workingData.rotation = not data.workingData.rotation;
+          //  }
+          //  tft.setCursor(215, 70 + 5 * 30);
+          //  if(data.workingData.rotation) tft.print(rotations[0].c_str());
+          //  else tft.print(rotations[1].c_str());
+            break;
+
           default:
           break;
         }
+        tmcstepper.initialize(data.workingData.rotation);  // Initialize TMC stepper using user selection rotation.
         lastexitbutton = true;  // Prevents exit button from skipping a level.
         EEPROM.put(0, data.workingData);  // Save parameters to EEPROM.
         EEPROM.commit();
@@ -234,14 +252,14 @@ return UserNumericInput(exitbutton, exitbutton, frequency);
 void TuneInputs::RestorePreviousChoice(int submenuIndex)
 {
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK); // restore old background
-  tft.setCursor(215, 70 + submenuIndex * 30);
+  tft.setCursor(225, 70 + submenuIndex * 30);
   tft.print(parameters[submenuIndex]);
 }
 
 void TuneInputs::HighlightNextChoice(int submenuIndex)
 {
   tft.setTextColor(ILI9341_MAGENTA, ILI9341_WHITE); // HIghlight new preset choice
-  tft.setCursor(215, 70 + submenuIndex * 30);
+  tft.setCursor(225, 70 + submenuIndex * 30);
   tft.print(parameters[submenuIndex]);
 }
 

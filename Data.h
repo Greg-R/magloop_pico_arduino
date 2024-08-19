@@ -94,6 +94,7 @@ const std::string releaseDate = "8-30-23";
   int coarse_sweep = 1;
   int accel = 2000;
   int speed = 500;
+  bool rotation = true;
   } workingData;
 
   //  This should be made variable length arrays.

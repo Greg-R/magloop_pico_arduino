@@ -33,7 +33,6 @@
 #include <string>
 #include <utility>
 #include <array>
-//#include "pico/stdlib.h"
 #include "Adafruit_ILI9341.h"
 #include <Arduino.h>
 #include "DDS.h"
@@ -43,20 +42,12 @@
 #include "Data.h"
 #include "Button.h"
 #include "DisplayUtility.h"
-//#include "FreeSerif9pt7b.h"
-//#include "FreeSerif12pt7b.h"
-//#include "FreeSerif24pt7b.h"
-//#include "FreeMono9pt7b.h"
-//#include "FreeMono12pt7b.h"
-//#include "FreeMono24pt7b.h"
-
 
 //  TuneInputs inherits from class DisplayUtility.
 class TuneInputs : public DisplayUtility {
 
 public:
     Adafruit_ILI9341 &tft;
-    //EEPROMClass &eeprom;
     Data &data;
     Button &enterbutton;
     Button &autotunebutton;
@@ -71,9 +62,9 @@ public:
     int menuIndex;
     int submenuIndex;
     volatile int menuEncoderState;
-    std::array<std::string, 5> parameterNames;
-    std::array<int32_t, 5> parameters; //={data.workingData.zero_offset, data.workingData.backlash, data.workingData.coarse_sweep, data.workingData.accel, data.workingData.speed};
-    std::array<int32_t, 5> hardware;
+    std::array<std::string, 6> parameterNames;
+    std::array<int32_t, 6> parameters; //={data.workingData.zero_offset, data.workingData.backlash, data.workingData.coarse_sweep, data.workingData.accel, data.workingData.speed};
+    std::array<int32_t, 6> hardware;
     enum class State
     {
         state0,

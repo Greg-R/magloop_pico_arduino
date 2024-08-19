@@ -140,7 +140,7 @@ void setup() {
   exitbutton.initialize();
   autotunebutton.initialize();
 
-  tmcstepper.initialize();
+  tmcstepper.initialize(data.workingData.rotation);  // Initialize TMC stepper using user selection rotation.
   tuneInputs.initialize();
   swr.ReadADCoffsets();  // To initialize; this is repeated later when the circuits are more thermally stable.
 
