@@ -81,12 +81,14 @@ public:
 
     void SelectParameter();
 
-    int32_t ChangeParameter(int32_t frequency);
+    int32_t ChangeParameter(int32_t minValue, int32_t maxValue, int32_t frequency);
 
     void RestorePreviousChoice(int submenuIndex);
 
     void HighlightNextChoice(int submenuIndex);
 
     void EncoderTest();
+
+    int32_t ConstrainedNumericInput(Button buttonAccept, Button buttonReject, int32_t minValue, int32_t maxValue, int32_t number);
 
 };

@@ -110,6 +110,8 @@ public:
 
     void Splash(std::string version, std::string releaseDate);
 
+    void DrawRaven();
+
     void frequencyMenuOption();
 
     int manualTune();

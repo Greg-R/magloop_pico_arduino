@@ -76,6 +76,100 @@ void DisplayManagement::Splash(std::string version, std::string releaseDate)
   tft.setTextSize(2);
 }
 
+
+/*****
+  Purpose: This function draws the Raven start up logo
+  Parameter list:
+    void
+
+  Return value:
+    void
+
+  CAUTION: run b4 splash screen, as it uses std fonts.
+
+*****/
+void DisplayManagement::DrawRaven() {
+  tft.fillScreen(ILI9341_BLUE);
+  int x = 319;
+  int y = 0;
+  int start;
+  int fin;
+  int Scolor = 0xFFE0;
+  int xl = 1;
+  int p;
+  float len = PI / 240;
+  float lenx = 0;
+
+  // Draw fancy screen shape
+
+  while (xl <= 240) {
+    p = x * sin(lenx);
+    p = p / 2;
+    start = 160 - p;
+    fin = 160 + p;
+    tft.drawLine(start, y, fin, y, Scolor);
+    tft.drawLine(start, y + 1, fin, y + 1, Scolor);
+    tft.drawLine(0, y + 1, start + 10, y + 1, Scolor);
+    tft.drawLine(fin - 10, y + 1, 319, y + 1, Scolor);
+    xl = xl + 3;
+    lenx = lenx + (3 * len);
+    y = y + 3;
+  }
+
+
+  tft.setTextColor(ILI9341_BLACK, ILI9341_CYAN);
+  tft.setTextSize(2);
+  tft.setCursor(4, 0);
+  tft.print(" Magnetic Loop Controller ");
+  tft.setCursor(94, 170);
+  tft.print(" Greg Raven ");
+  tft.setCursor(134, 190);
+  tft.print(" K5FN ");
+
+  byte raven[] = {
+    2, 82, 90, 3, 80, 93, 4, 78, 95, 5, 72, 96, 6, 67, 97, 7, 65, 98, 8, 64, 85, 8, 89, 98,
+    9, 63, 86, 9, 89, 99, 10, 64, 100, 11, 67, 100, 12, 71, 101, 13, 74, 101, 14, 77, 102,
+    15, 78, 102, 16, 79, 103, 17, 79, 103, 18, 80, 103, 19, 80, 104, 20, 79, 104, 21, 79, 104,
+    22, 78, 104, 23, 76, 104, 24, 75, 104, 25, 74, 103, 26, 72, 103, 27, 71, 103, 28, 69, 103,
+    29, 68, 104, 30, 67, 104, 31, 65, 104, 32, 64, 104, 33, 63, 104, 34, 62, 104, 35, 61, 104,
+    36, 59, 104, 37, 58, 104, 38, 57, 104, 39, 56, 104, 40, 55, 104, 41, 54, 104, 42, 53, 103,
+    43, 52, 103, 44, 50, 103, 45, 49, 103, 46, 48, 102, 47, 46, 102, 48, 45, 101, 49, 44, 101,
+    50, 42, 101, 51, 41, 100, 52, 39, 100, 53, 38, 99, 54, 37, 99, 55, 35, 98, 56, 34, 98,
+    57, 32, 97, 58, 31, 96, 59, 29, 96, 60, 27, 95, 61, 26, 95, 62, 24, 94, 63, 22, 93, 64, 21, 92,
+    65, 19, 92, 66, 17, 91, 67, 15, 90, 68, 14, 89, 69, 13, 88, 70, 11, 87, 71, 10, 85, 72, 9, 84,
+    73, 8, 82, 74, 7, 53, 74, 57, 80, 75, 7, 48, 75, 61, 79, 76, 7, 11, 76, 13, 41, 76, 63, 79,
+    77, 7, 8, 77, 13, 36, 77, 64, 79, 78, 11, 34, 78, 64, 71, 78, 74, 79, 79, 9, 32, 79, 64, 69, 79, 74, 79,
+    80, 8, 30, 80, 64, 69, 80, 74, 79, 81, 6, 28, 81, 64, 69, 81, 74, 79, 82, 5, 26, 82, 64, 69, 82, 74, 80,
+    83, 4, 24, 83, 64, 69, 83, 74, 81, 84, 2, 22, 84, 64, 70, 84, 75, 82, 85, 2, 20, 85, 64, 71, 85, 76, 83,
+    85, 92, 98, 86, 2, 18, 86, 65, 72, 86, 77, 84, 86, 89, 99, 87, 3, 4, 87, 7, 16, 87, 66, 73, 87, 78, 95,
+    87, 97, 99, 88, 6, 12, 88, 67, 74, 88, 79, 93, 88, 99, 99, 89, 6, 9, 89, 68, 96, 90, 69, 98,
+    91, 66, 99, 92, 64, 89, 92, 97, 100, 93, 62, 89, 93, 99, 100, 94, 62, 66, 94, 69, 82, 94, 85, 90,
+    95, 61, 63, 95, 74, 75, 95, 88, 91, 96, 61, 62, 96, 90, 91, 0, 0, 0, 0
+
+  };
+
+  int dex = 0;           // raven[data] index
+  byte yd = raven[dex];  // vertical coordinate never greater than 240, so fits a byte.
+  int xda = raven[dex + 1];
+  int xdb = raven[dex + 2];
+  byte offx = 96;  // offset x
+  byte offy = 64;  // offset y
+
+
+  while (yd + xda + xdb > 0) {
+    yd = yd + offy;
+    xda = xda + offx;
+    xdb = xdb + offx;
+    tft.drawLine(xda, yd, xdb, yd, ILI9341_BLACK);
+    dex = dex + 3;
+    yd = raven[dex];
+    xda = raven[dex + 1];
+    xdb = raven[dex + 2];
+  }
+  delay(5000);
+}
+
+
 /*****
   Purpose: To execute the FREQ menu option
   Argument list:
@@ -800,7 +894,7 @@ int DisplayManagement::SelectPreset()
       if (enterbutton.pushed & not lastenterbutton)
       {
         frequency = data.workingData.presetFrequencies[whichBandOption][submenuIndex];
-     frequency = tuneInputs.ChangeParameter(frequency);
+     frequency = tuneInputs.ChangeParameter(1000000, 30000000, frequency);
         // Save the preset to the EEPROM.
         data.workingData.presetFrequencies[whichBandOption][submenuIndex] = frequency;
         EEPROM.put(0, data.workingData);

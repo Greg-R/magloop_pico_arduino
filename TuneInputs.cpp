@@ -127,47 +127,41 @@ void TuneInputs::SelectParameter()
         {
           case 0:
             parameter = data.workingData.zero_offset;
-            parameter = ChangeParameter(parameter);
+            parameter = ChangeParameter(0, 2000, parameter);
             data.workingData.zero_offset = parameter;
             parameters[0] = parameter;
             break;
           case 1:
             parameter = data.workingData.backlash;
-            parameter = ChangeParameter(parameter);
+            parameter = ChangeParameter(0, 200, parameter);
             data.workingData.backlash = parameter;
             parameters[1] = parameter;
             break;
           case 2:
             parameter = data.workingData.coarse_sweep;
-            parameter = ChangeParameter(parameter);
+            parameter = ChangeParameter(0, 50, parameter);
             data.workingData.coarse_sweep = parameter;
             parameters[2] = parameter;
             break;
           case 3:
             parameter = data.workingData.accel;
-            parameter = ChangeParameter(parameter);
+            parameter = ChangeParameter(100, 2000, parameter);
             data.workingData.accel = parameter;
             parameters[3] = parameter;
             break;
           case 4:
             parameter = data.workingData.speed;
-            parameter = ChangeParameter(parameter);
+            parameter = ChangeParameter(100, 1000, parameter);
             data.workingData.speed = parameter;
             parameters[4] = parameter;
             break;
 
             case 5:
             parameter = data.workingData.rotation;
-            parameter = ChangeParameter(parameter);
+            parameter = ChangeParameter(0, 1, parameter);  // Rotation has only 2 values!
             data.workingData.rotation = parameter;
             parameters[5] = parameter;
 
-          //  if (enterbutton.pushed & not lastenterbutton) {
-          //  data.workingData.rotation = not data.workingData.rotation;
-          //  }
-          //  tft.setCursor(215, 70 + 5 * 30);
-          //  if(data.workingData.rotation) tft.print(rotations[0].c_str());
-          //  else tft.print(rotations[1].c_str());
             break;
 
           default:
@@ -207,19 +201,11 @@ void TuneInputs::SelectParameter()
 
   Dependencies:  DDS, SWR, Adafruit_ILI9341
 *****/
-int32_t TuneInputs::ChangeParameter(int32_t frequency) // Al Mod 9-8-19
+int32_t TuneInputs::ChangeParameter(int32_t minValue, int32_t maxValue, int32_t frequency) // Al Mod 9-8-19
 {
   int32_t halfScreen, insetMargin;
-  //int32_t defaultIncrement = 1;
-  //int32_t cursorOffset = 0;
-  //insetPad = 57; // Used to align digit indicator
-  //incrementPad = 05;
-  //digitSpacing = 28;
   insetMargin = 15;
-  //defaultIncrement = 1;
   halfScreen = data.PIXELHEIGHT / 2 - 25;
-  //bool lastexitbutton = true;
-  //bool lastenterbutton = true;
   digitEncoderMovement = 0;
   menuEncoderMovement = 0;
   updateMessageTop("          Enter New Hardware Parameter");
@@ -245,7 +231,7 @@ int32_t TuneInputs::ChangeParameter(int32_t frequency) // Al Mod 9-8-19
   tft.print("Exit Button");
   // End of custom code for this function.
 
-return UserNumericInput(exitbutton, exitbutton, frequency);
+return ConstrainedNumericInput(exitbutton, exitbutton, minValue, maxValue, frequency);
 }
 
 // These functions are slightly different than the ones in the DisplayUtility class.
@@ -285,4 +271,140 @@ void TuneInputs::EncoderTest() {
     tft.print(count);
     count = count + 1;
 }
+}
+
+
+int32_t TuneInputs::ConstrainedNumericInput(Button buttonAccept, Button buttonReject, int32_t minValue, int32_t maxValue, int32_t number)
+{
+  int32_t digitSpacing, halfScreen, insetMargin, offset, cursorHome;
+  int32_t defaultIncrement = 1;
+  int32_t cursorOffset = 0;
+  uint32_t numberSize;
+  digitSpacing = 28;
+  insetMargin = 15;
+  defaultIncrement = 1;
+  halfScreen = data.PIXELHEIGHT / 2 - 25;
+  bool lastAcceptButton = true;
+  bool lastRejectButton = true;
+  digitEncoderMovement = 0;
+  menuEncoderMovement = 0;
+
+  // Determine the size of the number:
+  numberSize = std::to_string(number).size();
+  offset = 10 - numberSize;
+
+  // First, print the number and the cursor (underscore) to the display.
+  tft.setTextSize(1);
+  tft.setFont(&FreeMono24pt7b);
+  tft.setTextColor(ILI9341_WHITE);
+  // Initially place cursor under single digit.
+  cursorHome = 10 + digitSpacing * offset + digitSpacing * (numberSize - 1); // The initial placement of the cursor.
+  tft.setCursor(cursorHome, halfScreen + 5);                                 // Assume 1KHz increment
+  tft.print("_");                                                            // underline selected character position
+  tft.setTextColor(ILI9341_GREEN);
+  tft.setCursor(10 + digitSpacing * offset, halfScreen);
+  tft.setTextSize(1);
+  tft.setFont(&FreeMono24pt7b);
+  tft.print(number);
+  // State Machine for frequency input with encoders.
+  while (true)
+  { // Update number until user pushes button.
+    menuEncoderPoll();
+    freqEncoderPoll();
+    // Poll accept button.
+    buttonAccept.buttonPushed();
+    if (buttonAccept.pushed & not lastAcceptButton)
+    {
+      break; // Break out of the while loop.
+    }
+    lastAcceptButton = buttonAccept.pushed;
+
+    // Don't look at the reject button if it is the same as the accept.
+    if (buttonReject.gpio != buttonAccept.gpio)
+    {
+      buttonReject.buttonPushed();
+      if (buttonReject.pushed & not lastRejectButton)
+      {
+        return number = 0; // Exit, don't change, returning 0 means exit.
+      }
+      lastRejectButton = buttonReject.pushed;
+    }
+
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(1);
+    tft.setFont(&FreeMono24pt7b);
+    // Handle movement of the cursor to the right.
+    if (digitEncoderMovement == 1)
+    {                                                                            // Change frequency digit increment
+      tft.fillRect(0, halfScreen + 6, data.PIXELWIDTH * .91, 20, ILI9341_BLACK); // Erase existing cursor.
+      defaultIncrement = defaultIncrement / 10;                                  // Move to right, so divide by 10.
+      if (defaultIncrement < 1)
+      { // Don't go too far right, reset defaultIncrement.
+        defaultIncrement = 1;
+      }
+      else
+        cursorOffset = cursorOffset + digitSpacing; // Move cursor to the right.
+      // Don't allow increments > 1000000.
+      if (defaultIncrement > 1000000)
+      {
+        defaultIncrement = 1000000;
+      }
+      if (cursorOffset > digitSpacing * 6)
+      { // Don't overshoot or...
+        cursorOffset = cursorOffset - digitSpacing;
+      }
+      tft.setCursor(cursorHome + cursorOffset, halfScreen + 5); //
+      tft.print("_");
+      digitEncoderMovement = 0;
+    }
+    else
+    {
+      // Handle movement of the cursor to the left.
+      if (digitEncoderMovement == -1)
+      {
+        tft.fillRect(0, halfScreen + 6, data.PIXELWIDTH * .91, 20, ILI9341_BLACK); // Erase existing cursor.
+        defaultIncrement = defaultIncrement * 10;
+        if (defaultIncrement > 1000000)
+        { // Don't go too far left
+          defaultIncrement = 1000000;
+        }
+        else
+          cursorOffset = cursorOffset - digitSpacing; // Move cursor to the left.
+        if (cursorOffset < -digitSpacing * 6)         // Don't undershoot either
+          cursorOffset = cursorOffset + digitSpacing;
+
+        tft.setCursor(cursorHome + cursorOffset, halfScreen + 5);
+        tft.print("_");
+        digitEncoderMovement = 0;
+      }
+    }
+    tft.setTextColor(ILI9341_GREEN);
+    digitEncoderMovement = 0;
+    menuEncoderMovement = 0;
+    // Change digit value using the Frequency encoder.  This only has to refresh the number.
+    if (frequencyEncoderMovement)
+    {
+      number += (int32_t)(frequencyEncoderMovement * defaultIncrement);
+
+      if(number > maxValue) number = maxValue;
+      if(number < minValue) number = minValue;
+
+      tft.fillRect(insetMargin, halfScreen - 35, data.PIXELWIDTH * .91, 40, ILI9341_BLACK); // Erase the old number?
+
+      numberSize = std::to_string(number).size();
+      offset = 10 - numberSize;
+
+      tft.setCursor(10 + digitSpacing * offset, halfScreen);
+      tft.setTextSize(1);
+      tft.setFont(&FreeMono24pt7b);
+      tft.print(number);
+      frequencyEncoderMovement = 0; // Reset encoder flag
+    }
+  } // end while loop
+
+  tft.setTextSize(2); // Back to normal
+  tft.setTextColor(ILI9341_WHITE);
+  digitEncoderMovement = 0;
+  menuEncoderMovement = 0;
+  return number;
 }

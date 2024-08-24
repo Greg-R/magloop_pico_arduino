@@ -159,6 +159,7 @@ void setup() {
   dds.DDSWakeUp();  // This resets the DDS, and it will have no output.
 
   // Show "Splash" screen for 5 seconds.  This also allows circuits to stabilize.
+  display.DrawRaven();
   display.Splash(data.version, data.releaseDate);
   delay(5000);
   tft.fillScreen(ILI9341_BLACK);  // Clear display.
