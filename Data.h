@@ -42,7 +42,7 @@ class Data
 public:
 
 const std::string version = "main";
-const std::string releaseDate = "8-30-23";
+const std::string releaseDate = "8-26-24";
 
   // Flags used to indicate switch closures.
   bool maxclose;
