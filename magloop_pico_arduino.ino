@@ -44,6 +44,7 @@
 #include "TuneInputs.h"
 #include "TmcStepper.h"
 #include "Hardware.h"
+#include "Configuration.h"
 
 int currentFrequency;
 int bypassTest = 5;  // Set to arbitrary value other than 0 or 10.
