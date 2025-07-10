@@ -473,6 +473,7 @@ DisplayUtility::TopMenuState DisplayManagement::MakeMenuSelection(TopMenuState i
   return static_cast<TopMenuState>(index_int);  // Cast back to the state enum.
 }
 
+
 /*****
   Purpose: To get a band menu choice
   Argument list:
@@ -554,6 +555,89 @@ int DisplayManagement::SelectBand(std::vector<std::string> bands, int coorX, int
   return index;
 }
 
+
+/*****
+  Purpose: To get a band menu choice
+  Argument list:
+    const std::string bands[3].  Example: {"40M", "30M", "20M"}
+    int coorX, coorY.  The upper left corner of the menu selections.
+  Return value:
+    int                       the menu selected
+
+  Dependencies:  Adafruit_ILI9341 tft
+*****/
+int DisplayManagement::SelectFunction(std::vector<std::string> bands, int coorX, int coorY)
+{
+  updateMessageTop("       Choose using Menu Encoder");
+  EraseBelowMenu(); // Redundant???
+  // int currBand[] = {40, 30, 20}; // Used???
+  //int i, where = 0;
+  int index;
+  bool enterLastPushed = true; // Must be set to true or a false exit could occur.
+  bool exitLastPushed = true;
+  updateMessageBottom("             Press Enter to Select");
+  tft.setTextSize(1);
+  tft.setFont(&FreeSerif12pt7b);
+  tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
+  for (unsigned int i = 0; i < bands.size(); i++)
+  {
+    tft.setCursor(coorX, coorY + i * 30);
+    tft.print(bands[i].c_str());
+  }
+  tft.setCursor(coorX, coorY);
+  tft.setTextColor(ILI9341_BLUE, ILI9341_WHITE);
+  tft.print(bands[0].c_str());
+  index = 0;
+
+  // State Machine.  Calling this function enters this loop and stays until Enter or Exit is pressed.
+  while (true)
+  {
+    menuEncoderPoll();
+    if (menuEncoderMovement)
+    {
+      if (menuEncoderMovement == 1)
+      {
+        index++;
+        if ((unsigned)index == bands.size())
+        { // wrap to first index
+          index = 0;
+        }
+      }
+      if (menuEncoderMovement == -1)
+      {
+        index--;
+        if (index < 0)
+        { // wrap to last index
+          index = 2;
+        }
+      }
+      menuEncoderMovement = 0;
+      tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
+      for (unsigned int i = 0; i < bands.size(); i++)
+      {
+        tft.setCursor(coorX, coorY + i * 30);
+        tft.print(bands[i].c_str());
+      }
+      tft.setTextColor(ILI9341_BLUE, ILI9341_WHITE);
+      tft.setCursor(coorX, coorY + index * 30);
+      tft.print(bands[index].c_str());
+    }
+    // Poll buttons.
+    enterbutton.buttonPushed();
+    exitbutton.buttonPushed();
+    if (enterbutton.pushed & not enterLastPushed)
+      break; // Exit the state machine if there was a false to true transition, return selected index.
+    enterLastPushed = enterbutton.pushed;
+    if (exitbutton.pushed & not exitLastPushed)
+      return index = 4; // 4 is a signal that the menu was exited from without making a selection.
+    exitLastPushed = exitbutton.pushed;
+  } // end while
+
+  return index;
+}
+
+
+
 /*****
   Purpose: To rewrite the frequency display
   Does not reset DDS to new frequency!
@@ -618,12 +702,12 @@ void DisplayManagement::DoFirstCalibrate()
   whichLine = 0;                                  // X coord for mins
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK); // Table data
 
-  for (i = 0; i < data.MAXBANDS; i = i + 1)
+  for (i = 0; i < NUMBER_BANDS; i = i + 1)
   { // For the 3 bands...
     for (j = 0; j < 2; j = j + 1)
     {
       this->data.workingData.currentBand = i;             // Used by SWRdataAnalysis()
-      frequency = this->data.workingData.bandEdges[i][j]; // Select a band edge to calibrate
+      frequency = this->data.workingData.bandEdges[user_bands[i]][j]; // Select a band edge to calibrate
       this->data.workingData.currentFrequency = frequency;
       PowerStepDdsCirRelay(true, frequency, true, true); //  Power up circuits, close relay.  Leave on until cal complete.
       updateMessageTop("                  Coarse Tuning");
@@ -644,10 +728,10 @@ void DisplayManagement::DoFirstCalibrate()
 
         if (minSWRAuto < TARGETMAXSWR)
         { // Ignore values greater than Target Max
-          data.workingData.bandLimitPositionCounts[i][j] = SWRMinPosition;
+          data.workingData.bandLimitPositionCounts[user_bands[i]][j] = SWRMinPosition;
           // Write the position to the upper frequency.  This is to prevent AutoTune from using the default of zero.
           if (j == 0)
-            data.workingData.bandLimitPositionCounts[i][1] = SWRMinPosition;
+            data.workingData.bandLimitPositionCounts[user_bands[i]][1] = SWRMinPosition;
           tft.setCursor(0, 90 + whichLine * TEXTLINESPACING);
           if (dds.currentFrequency < 10000000)
           {
@@ -1097,7 +1181,7 @@ void DisplayManagement::CalibrationMachine()
     switch (state)
     {
     case State::state0:         // Select function.
-      i = SelectBand(cals, 90, 90) + 1; // Calibration states are 1,2,3.
+      i = SelectFunction(cals, 90, 90) + 1; // Calibration states are 1,2,3.
       if (i == 5)
         return;         // No selection in Calibrate menu; exit machine and return to top level.
       state = (State)i; // Cast i to State enum type.

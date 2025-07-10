@@ -122,6 +122,8 @@ public:
 
     int SelectBand(std::vector<std::string> bands, int coorX, int coorY);
 
+    int SelectFunction(std::vector<std::string> bands, int coorX, int coorY);   
+
     void UpdateFrequency(int frequency);
 
     void DoFirstCalibrate();

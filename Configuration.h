@@ -21,7 +21,7 @@ uint32_t TEN_METERS = 8;
 // The default selections are for 40M, 30M, and 20M.
 // Un-comment more lines if NUMBER_BANDS is greater than 3.
 
-uint32_t band0 = EIGHTY_METERS;
+uint32_t band0 = FORTY_METERS;
 uint32_t band1 = THIRTY_METERS;
 uint32_t band2 = TWENTY_METERS;
 //uint32_t band3 = TWELVE_METERS;
