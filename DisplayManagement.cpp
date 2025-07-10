@@ -29,7 +29,7 @@
 */
 
 #include "DisplayManagement.h"
-#include "Configuration.h"
+//#include "Configuration.h"
 #include <cstdint>
 
 DisplayManagement::DisplayManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr,
@@ -206,8 +206,8 @@ void DisplayManagement::frequencyMenuOption()
 //      if (whichBandOption == this->data.workingData.currentBand)
 //        frequency = data.workingData.currentFrequency;
 //      else
-        frequency = data.workingData.lastFreq[user_bands[whichBandOption]]; // Set initial frequency for each band from Preset list
-      this->data.workingData.currentBand = user_bands[whichBandOption];                 //  Update the current band.
+        frequency = data.workingData.lastFreq[data.user_bands[whichBandOption]]; // Set initial frequency for each band from Preset list
+      this->data.workingData.currentBand = data.user_bands[whichBandOption];                 //  Update the current band.
       state = State::state2;                                                // Proceed to manual frequency adjustment state.
       break;
     case State::state2:
@@ -219,15 +219,15 @@ void DisplayManagement::frequencyMenuOption()
         break;
       }
       data.workingData.currentFrequency = frequency;
-      data.workingData.lastFreq[whichBandOption] = frequency;
+      data.workingData.lastFreq[data.user_bands[whichBandOption]] = frequency;
       EEPROM.put(0, data.workingData);
       EEPROM.commit(); // Write to EEPROM.
       tft.fillRect(0, 100, 311, 150, ILI9341_BLACK); // ???
-      minSWRAuto = AutoTuneSWR(whichBandOption, frequency); // Auto tune here
+      minSWRAuto = AutoTuneSWR(data.user_bands[whichBandOption], frequency); // Auto tune here
       // After AutoTune, do full update of display with SWR vs. frequency plot:
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
-      GraphAxis(whichBandOption);
-      PlotSWRValueNew(whichBandOption, tempCurrentPosition, tempSWR, SWRMinPosition);
+      GraphAxis(data.user_bands[whichBandOption]);
+      PlotSWRValueNew(data.user_bands[whichBandOption], tempCurrentPosition, tempSWR, SWRMinPosition);
       delay(5000);
       break; //  state is not changed; should go back to state2.
          case State::state3: 
@@ -501,11 +501,11 @@ int DisplayManagement::SelectBand(std::vector<std::string> bands, int coorX, int
   {
     tft.setCursor(coorX, coorY + i * 30);
 //    tft.print(bands[i].c_str());
-    tft.print(bands[user_bands[i]].c_str());  // Print user selected bands to display.
+    tft.print(data.bands[data.user_bands[i]].c_str());  // Print user selected bands to display.
   }
   tft.setCursor(coorX, coorY);
   tft.setTextColor(ILI9341_BLUE, ILI9341_WHITE);
-  tft.print(bands[user_bands[0]].c_str());
+  tft.print(bands[data.user_bands[0]].c_str());
   index = 0;
 
   // State Machine.  Calling this function enters this loop and stays until Enter or Exit is pressed.
@@ -535,11 +535,11 @@ int DisplayManagement::SelectBand(std::vector<std::string> bands, int coorX, int
       for (unsigned int i = 0; i < NUMBER_BANDS; i++)
       {
         tft.setCursor(coorX, coorY + i * 30);
-        tft.print(bands[user_bands[i]].c_str());
+        tft.print(bands[data.user_bands[i]].c_str());
       }
       tft.setTextColor(ILI9341_BLUE, ILI9341_WHITE);
       tft.setCursor(coorX, coorY + index * 30);
-      tft.print(bands[user_bands[index]].c_str());
+      tft.print(bands[data.user_bands[index]].c_str());
     }
     // Poll buttons.
     enterbutton.buttonPushed();
@@ -707,7 +707,7 @@ void DisplayManagement::DoFirstCalibrate()
     for (j = 0; j < 2; j = j + 1)
     {
       this->data.workingData.currentBand = i;             // Used by SWRdataAnalysis()
-      frequency = this->data.workingData.bandEdges[user_bands[i]][j]; // Select a band edge to calibrate
+      frequency = this->data.workingData.bandEdges[data.user_bands[i]][j]; // Select a band edge to calibrate
       this->data.workingData.currentFrequency = frequency;
       PowerStepDdsCirRelay(true, frequency, true, true); //  Power up circuits, close relay.  Leave on until cal complete.
       updateMessageTop("                  Coarse Tuning");
@@ -728,10 +728,10 @@ void DisplayManagement::DoFirstCalibrate()
 
         if (minSWRAuto < TARGETMAXSWR)
         { // Ignore values greater than Target Max
-          data.workingData.bandLimitPositionCounts[user_bands[i]][j] = SWRMinPosition;
+          data.workingData.bandLimitPositionCounts[data.user_bands[i]][j] = SWRMinPosition;
           // Write the position to the upper frequency.  This is to prevent AutoTune from using the default of zero.
           if (j == 0)
-            data.workingData.bandLimitPositionCounts[user_bands[i]][1] = SWRMinPosition;
+            data.workingData.bandLimitPositionCounts[data.user_bands[i]][1] = SWRMinPosition;
           tft.setCursor(0, 90 + whichLine * TEXTLINESPACING);
           if (dds.currentFrequency < 10000000)
           {
@@ -802,7 +802,7 @@ void DisplayManagement::DoSingleBandCalibrate(int whichBandOption)
   updateMessageBottom("            Single Band Calibrate");
   for (j = 0; j < 2; j++)
   {                                                             // For each band edge...
-    frequency = data.workingData.bandEdges[whichBandOption][j]; // Select a band edge
+    frequency = data.workingData.bandEdges[data.user_bands[whichBandOption]][j]; // Select a band edge
     while (true)
     {
       if (digitalRead(data.maxswitch) != HIGH)
@@ -812,11 +812,11 @@ void DisplayManagement::DoSingleBandCalibrate(int whichBandOption)
       }
 //      currentSWR = swr.ReadSWRValue();
       updateMessageTop("Auto Tuning");
-      minSWRAuto = AutoTuneSWR(whichBandOption, frequency);
+      minSWRAuto = AutoTuneSWR(data.user_bands[whichBandOption], frequency);
       ShowSubmenuData(minSWRAuto, dds.currentFrequency); // Update SWR value
       if (minSWRAuto < TARGETMAXSWR)
       { // Ignore values greater than Target Max
-        data.workingData.bandLimitPositionCounts[whichBandOption][j] = SWRMinPosition;
+        data.workingData.bandLimitPositionCounts[data.user_bands[whichBandOption]][j] = SWRMinPosition;
         tft.setCursor(0, 90 + whichLine * TEXTLINESPACING);
         if (dds.currentFrequency < 10000000)
         {
@@ -831,7 +831,7 @@ void DisplayManagement::DoSingleBandCalibrate(int whichBandOption)
         break;       // This sends control to next edge
       }
     }
-    position = data.workingData.bandLimitPositionCounts[whichBandOption][1] - 50;
+    position = data.workingData.bandLimitPositionCounts[data.user_bands[whichBandOption]][1] - 50;
   } // end for (j
   position = SWRFinalPosition + 50;
   EEPROM.commit(); // Write values to EEPROM
@@ -895,10 +895,10 @@ void DisplayManagement::ProcessPresets()
       this->data.workingData.currentFrequency = frequency;
       EEPROM.put(0, data.workingData);
       EEPROM.commit();
-      minSWRAuto = AutoTuneSWR(whichBandOption, data.workingData.currentFrequency);
+      minSWRAuto = AutoTuneSWR(data.user_bands[whichBandOption], data.workingData.currentFrequency);
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
-      GraphAxis(whichBandOption);
-      PlotSWRValueNew(whichBandOption, tempCurrentPosition, tempSWR, SWRMinPosition);
+      GraphAxis(data.user_bands[whichBandOption]);
+      PlotSWRValueNew(data.user_bands[whichBandOption], tempCurrentPosition, tempSWR, SWRMinPosition);
       delay(5000);
       state = State::state2; // Move to Select Preset state.
       break;
@@ -947,11 +947,11 @@ int DisplayManagement::SelectPreset()
         tft.print(".");
         tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
         tft.setCursor(65, 70 + i * 30);
-        tft.print(data.workingData.presetFrequencies[whichBandOption][i]);
+        tft.print(data.workingData.presetFrequencies[data.user_bands[whichBandOption]][i]);
       }
       tft.setTextColor(ILI9341_MAGENTA, ILI9341_WHITE);
       tft.setCursor(65, 70 + submenuIndex * 30);
-      tft.print(data.workingData.presetFrequencies[whichBandOption][submenuIndex]);
+      tft.print(data.workingData.presetFrequencies[data.user_bands[whichBandOption]][submenuIndex]);
       state = State::state1;
       break;
 
@@ -959,20 +959,20 @@ int DisplayManagement::SelectPreset()
       menuEncoderPoll();
       if (menuEncoderMovement == 1)
       { // Turning clockwise
-        RestorePreviousPresetChoice(submenuIndex, whichBandOption);
+        RestorePreviousPresetChoice(submenuIndex, data.user_bands[whichBandOption]);
         submenuIndex++;
         if (submenuIndex > data.PRESETSPERBAND - 1)
           submenuIndex = 0;
-        HighlightNewPresetChoice(submenuIndex, whichBandOption);
+        HighlightNewPresetChoice(submenuIndex, data.user_bands[whichBandOption]);
         menuEncoderMovement = 0;
       }
       if (menuEncoderMovement == -1)
       { // Tuning counter-clockwise
-        RestorePreviousPresetChoice(submenuIndex, whichBandOption);
+        RestorePreviousPresetChoice(submenuIndex, data.user_bands[whichBandOption]);
         submenuIndex--;
         if (submenuIndex < 0)
           submenuIndex = data.PRESETSPERBAND - 1;
-        HighlightNewPresetChoice(submenuIndex, whichBandOption);
+        HighlightNewPresetChoice(submenuIndex, data.user_bands[whichBandOption]);
         menuEncoderMovement = 0;
       }
       if (exitbutton.pushed & not lastexitbutton)
@@ -980,10 +980,10 @@ int DisplayManagement::SelectPreset()
       lastexitbutton = exitbutton.pushed;
       if (enterbutton.pushed & not lastenterbutton)
       {
-        frequency = data.workingData.presetFrequencies[whichBandOption][submenuIndex];
+        frequency = data.workingData.presetFrequencies[data.user_bands[whichBandOption]][submenuIndex];
      frequency = tuneInputs.ChangeParameter(1000000, 30000000, frequency);
         // Save the preset to the EEPROM.
-        data.workingData.presetFrequencies[whichBandOption][submenuIndex] = frequency;
+        data.workingData.presetFrequencies[data.user_bands[whichBandOption]][submenuIndex] = frequency;
         EEPROM.put(0, data.workingData);
         EEPROM.commit();
         //  Need to refresh graphics, because they were changed by ChangeFrequency!
@@ -1002,7 +1002,7 @@ int DisplayManagement::SelectPreset()
     lastautotunebutton = autotunebutton.pushed;
 
   }                                                                              // end while Preset state selection machine
-  frequency = data.workingData.presetFrequencies[whichBandOption][submenuIndex]; //  Retrieve the selected frequency.
+  frequency = data.workingData.presetFrequencies[data.user_bands[whichBandOption]][submenuIndex]; //  Retrieve the selected frequency.
   return frequency;
 }
 
@@ -1105,7 +1105,7 @@ void DisplayManagement::ManualFrequencyControl(int whichBandOption)
   //int yTick = YAXISSTART + 5;
   bool lastenterbutton = true;
   frequencyEncoderMovement = 0;
-  GraphAxis(whichBandOption);
+  GraphAxis(data.user_bands[whichBandOption]);
   if (frequencyEncoderMovement2 != 0)
   {
     frequencyOld = dds.currentFrequency;
@@ -1127,13 +1127,13 @@ void DisplayManagement::ManualFrequencyControl(int whichBandOption)
     updateMessageTop("                  Exit to Return");
     updateMessageBottom("     Freq: Adjust - AutoTune: Refine");
     dds.SendFrequency(frequency); // Redundant???
-    position = stepper.currentPosition() + ((frequency - frequencyOld) / (data.hertzPerStepperUnitVVC[whichBandOption]));
+    position = stepper.currentPosition() + ((frequency - frequencyOld) / (data.hertzPerStepperUnitVVC[data.user_bands[whichBandOption]]));
     stepper.MoveStepperToPosition(position); // Al 4-20-20
 //    int k = 0;
     frequencyEncoderMovement = 0;
     frequencyEncoderMovement2 = 0;
   }
-  PlotNewStartingFrequency(whichBandOption);
+  PlotNewStartingFrequency(data.user_bands[whichBandOption]);
   ShowSubmenuData(swr.ReadSWRValue(), frequency);
 }
 

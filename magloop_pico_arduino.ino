@@ -30,7 +30,7 @@
 */
 
 // #define PICO_STACK_SIZE _u(0x1000)  // Uncomment if stack gets blown.  This doubles stack size.//
-//#include "Configuration.h"
+#include "Configuration.h"
 #include <Arduino.h>
 #include <SPI.h>
 #include <Adafruit_ILI9341.h>

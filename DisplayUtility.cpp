@@ -31,6 +31,7 @@
 // This is a collection of often-used Display manipulation methods which are intended to be a base class for other display manipulating classes.
 
 #include "DisplayUtility.h"
+//#include "Configuration.h"
 
 DisplayUtility::DisplayUtility(Adafruit_ILI9341& tft, DDS &dds, SWR &swr, Data &data, TmcStepper &tmcstepper): tft(tft), dds(dds), swr(swr), data(data), tmcstepper(tmcstepper), menuEncoder(20, 18), frequencyEncoder(21, 17)
 {
@@ -260,7 +261,7 @@ void DisplayUtility::RestorePreviousPresetChoice(int submenuIndex, int whichBand
 {
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK); // restore old background
   tft.setCursor(65, 70 + submenuIndex * 30);
-  tft.print(data.workingData.presetFrequencies[whichBandOption][submenuIndex]);
+  tft.print(data.workingData.presetFrequencies[data.user_bands[whichBandOption]][submenuIndex]);
 }
 
 /*****
@@ -278,7 +279,7 @@ void DisplayUtility::HighlightNewPresetChoice(int submenuIndex, int whichBandOpt
 {
   tft.setTextColor(ILI9341_MAGENTA, ILI9341_WHITE); // HIghlight new preset choice
   tft.setCursor(65, 70 + submenuIndex * 30);
-  tft.print(data.workingData.presetFrequencies[whichBandOption][submenuIndex]);
+  tft.print(data.workingData.presetFrequencies[data.user_bands[whichBandOption]][submenuIndex]);
 }
 
 /*****

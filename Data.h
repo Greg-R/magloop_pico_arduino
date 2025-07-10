@@ -34,6 +34,7 @@
 #include <vector>
 // #include "Configuration.h"
 
+#define NUMBER_BANDS 3
 
 //  This class is intended to manage various frequency and position related constants and variables.
 //  The single object will be referenced by most or maybe all of the other class objects.
@@ -56,6 +57,36 @@ const std::string releaseDate = "8-26-24";
   const int MAXMENUES = 5;
   const int PIXELWIDTH = 320;   // Display pixels width.
   const int PIXELHEIGHT = 240;  // Display pixels height.
+
+
+uint32_t EIGHTY_METERS = 0;
+uint32_t SIXTY_METERS = 1;
+uint32_t FORTY_METERS = 2;
+uint32_t THIRTY_METERS = 3;
+uint32_t TWENTY_METERS = 4;
+uint32_t SEVENTEEN_METERS = 5;
+uint32_t FIFTEEN_METERS = 6;
+uint32_t TWELVE_METERS = 7;
+uint32_t TEN_METERS = 8;
+
+// The bands are selected with the following variables.
+// The default selections are for 40M, 30M, and 20M.
+// Un-comment more lines if NUMBER_BANDS is greater than 3.
+
+uint32_t band0 = FORTY_METERS;
+uint32_t band1 = THIRTY_METERS;
+uint32_t band2 = TWENTY_METERS;
+//uint32_t band3 = TWELVE_METERS;
+// const uint32_t band4 =
+
+#if NUMBER_BANDS == 3
+std::vector<uint32_t> user_bands = {band0, band1, band2};
+#elif NUMBER_BANDS == 4
+std::vector<uint32_t> user_bands = {band0, band1, band2, band3};
+#elif NUMBER_BANDS == 5
+std::vector<uint32_t> user_bands = {band0, band1, band2, band3, band4};
+#endif
+
 
   // Bands:
 
@@ -123,7 +154,7 @@ const std::string releaseDate = "8-26-24";
   int coarse_sweep = 1;
   int accel = 2000;
   int speed = 500;
-  bool rotation = true;
+  bool rotation = false;
   } workingData;
 
   //  This should be made variable length arrays.
