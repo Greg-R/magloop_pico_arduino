@@ -61,33 +61,33 @@ void Data::computeSlopes()
 
 void Data::writeDefaultValues()
 {
-   workingData.presetFrequencies[0][0] = 7030000L;
-   workingData.presetFrequencies[0][1] = 7040000L;
-   workingData.presetFrequencies[0][2] = 7100000L;
-   workingData.presetFrequencies[0][3] = 7150000L;
-   workingData.presetFrequencies[0][4] = 7250000L;
-   workingData.presetFrequencies[0][5] = 7285000L;
+   workingData.presetFrequencies[0][0] = 3503000;
+   workingData.presetFrequencies[0][1] = 3504000;
+   workingData.presetFrequencies[0][2] = 3600000;
+   workingData.presetFrequencies[0][3] = 3615000;
+   workingData.presetFrequencies[0][4] = 3750000;
+   workingData.presetFrequencies[0][5] = 3900000;
 
-   workingData.presetFrequencies[1][0] = 10106000L;
-   workingData.presetFrequencies[1][1] = 10116000L;
-   workingData.presetFrequencies[1][2] = 10120000L;
-   workingData.presetFrequencies[1][3] = 10130000L;
-   workingData.presetFrequencies[1][4] = 10140000L;
-   workingData.presetFrequencies[1][5] = 10145000L;
+   workingData.presetFrequencies[1][0] = 5330500; // 5330500, 5346500, 5357000, 5371500, 5403500, 5403500
+   workingData.presetFrequencies[1][1] = 5330500;
+   workingData.presetFrequencies[1][2] = 5346500;
+   workingData.presetFrequencies[1][3] = 5357000;
+   workingData.presetFrequencies[1][4] = 5371500;
+   workingData.presetFrequencies[1][5] = 5403500;
 
-   workingData.presetFrequencies[2][0] = 14030000L;
-   workingData.presetFrequencies[2][1] = 14060000L;
-   workingData.presetFrequencies[2][2] = 14100000L;
-   workingData.presetFrequencies[2][3] = 14200000L;
-   workingData.presetFrequencies[2][4] = 14250000L;
-   workingData.presetFrequencies[2][5] = 14285000L;
+   workingData.presetFrequencies[2][0] = 7030000;
+   workingData.presetFrequencies[2][1] = 7040000;
+   workingData.presetFrequencies[2][2] = 7100000;
+   workingData.presetFrequencies[2][3] = 7150000;
+   workingData.presetFrequencies[2][4] = 7250000;
+   workingData.presetFrequencies[2][5] = 7285000;
 
-   workingData.presetFrequencies[3][0] = 14030000L;
-   workingData.presetFrequencies[3][1] = 14060000L;
-   workingData.presetFrequencies[3][2] = 14100000L;
-   workingData.presetFrequencies[3][3] = 14200000L;
-   workingData.presetFrequencies[3][4] = 14250000L;
-   workingData.presetFrequencies[3][5] = 14285000L;   
+   workingData.presetFrequencies[3][0] = 10106000;
+   workingData.presetFrequencies[3][1] = 10116000;
+   workingData.presetFrequencies[3][2] = 10120000;
+   workingData.presetFrequencies[3][3] = 10130000;
+   workingData.presetFrequencies[3][4] = 10140000;
+   workingData.presetFrequencies[3][5] = 10145000;   
 
    workingData.presetFrequencies[4][0] = 14030000L;
    workingData.presetFrequencies[4][1] = 14060000L;

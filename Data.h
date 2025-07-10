@@ -54,7 +54,7 @@ const std::string releaseDate = "8-26-24";
   //  These are fundamental size definitions used throughout the project.
   const int PRESETSPERBAND = 6; // Allow this many preset frequencies on each band
   const int MAXBANDS = 5;       // Can only process this many frequency bands
-  const int MAXMENUES = 5;
+  const int MAXMENUES = 3;
   const int PIXELWIDTH = 320;   // Display pixels width.
   const int PIXELHEIGHT = 240;  // Display pixels height.
 
@@ -129,7 +129,7 @@ std::vector<uint32_t> user_bands = {band0, band1, band2, band3, band4};
             {3503000, 3504000, 3600000, 3615000, 3750000, 3900000},       // 80M
             {5330500, 5346500, 5357000, 5371500, 5403500, 5403500},       // 60M.  This band is channelized.              
             {7030000, 7040000, 7100000, 7150000, 7250000, 7285000},       // 40M
-            {10106000, 10116000, 10120000, 10130000, 10140000, 10145000}, // 30M
+            {}, // 30M
             {14030000, 14060000, 14100000, 14200000, 14250000, 14285000},  // 20M
             {14030000, 14060000, 14100000, 14200000, 14250000, 14285000},  // 17M
             {14030000, 14060000, 14100000, 14200000, 14250000, 14285000},  // 15M            

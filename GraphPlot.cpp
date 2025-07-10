@@ -167,6 +167,13 @@ void GraphPlot::PlotNewStartingFrequency(int whichBandOption)
   long highEnd, lowEnd;
   //float freqCount;
   float HzPerPix;
+
+   highEnd = data.workingData.bandEdges[data.user_bands[whichBandOption]][0];
+   lowEnd   = data.workingData.bandEdges[data.user_bands[whichBandOption]][1];
+   HzPerPix = static_cast<float>(highEnd - lowEnd) / float(XAXISEND - XAXISSTART);
+   x = 25 + static_cast<float>(dds.currentFrequency - lowEnd) / HzPerPix;
+
+/*
   switch (whichBandOption)
   {
   case 0:
@@ -192,6 +199,9 @@ void GraphPlot::PlotNewStartingFrequency(int whichBandOption)
     x = 25 + static_cast<float>(dds.currentFrequency - lowEnd) / HzPerPix;
     break;
   }
+*/
+
+
 
   tft.drawLine(xOld, YAXISSTART, xOld, YAXISEND, ILI9341_BLACK);
   tft.drawLine(x, YAXISSTART, x, YAXISEND, ILI9341_YELLOW); // Y axis
@@ -219,6 +229,17 @@ void GraphPlot::PlotSWRValueNew(int whichBandOption, std::vector<int32_t>& tempC
   float plotFreq;
   long freqStart = 0;
   long freqEnd = 0;
+
+
+//    freqStart = data.LOWEND40M;
+//    freqEnd = data.HIGHEND40M;
+
+   freqStart = data.workingData.bandEdges[data.user_bands[whichBandOption]][0];
+   freqEnd   = data.workingData.bandEdges[data.user_bands[whichBandOption]][1];
+
+
+
+/*
   switch (whichBandOption)
   { // This should use Data object to get band limits???
   case 0:
@@ -236,12 +257,14 @@ void GraphPlot::PlotSWRValueNew(int whichBandOption, std::vector<int32_t>& tempC
     freqEnd = data.HIGHEND20M;
     break;
   }
+*/
+
   // This for loop plots the data to the axes.  The data is in the array tempSWR[i].
   for (unsigned int i = 0; i < tempCurrentPosition.size(); i++)
   {
     if (tempCurrentPosition[i] > 0 and tempSWR[i] < 3)
     {
-      HzPerStep = (freqEnd - freqStart) / static_cast<float>(data.workingData.bandLimitPositionCounts[whichBandOption][1] - data.workingData.bandLimitPositionCounts[whichBandOption][0]);
+      HzPerStep = (freqEnd - freqStart) / static_cast<float>(data.workingData.bandLimitPositionCounts[data.user_bands[whichBandOption]][1] - data.workingData.bandLimitPositionCounts[data.user_bands[whichBandOption]][0]);
       currentFrequencyDiff = float(tempCurrentPosition[i] - SWRMinPosition) * HzPerStep;
       plotFreq = (dds.currentFrequency + currentFrequencyDiff);
       HzPerPix = static_cast<float>(freqEnd - freqStart) / float(XAXISEND - XAXISSTART);

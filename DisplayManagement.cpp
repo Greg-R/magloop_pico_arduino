@@ -227,7 +227,7 @@ void DisplayManagement::frequencyMenuOption()
       // After AutoTune, do full update of display with SWR vs. frequency plot:
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
       GraphAxis(data.user_bands[whichBandOption]);
-      PlotSWRValueNew(data.user_bands[whichBandOption], tempCurrentPosition, tempSWR, SWRMinPosition);
+      PlotSWRValueNew(whichBandOption, tempCurrentPosition, tempSWR, SWRMinPosition);
       delay(5000);
       break; //  state is not changed; should go back to state2.
          case State::state3: 
@@ -875,7 +875,7 @@ void DisplayManagement::ProcessPresets()
       return; // Return to top level.
     case State::state1:
       whichBandOption = SelectBand(data.bands, 130, 100); // Select the band to be used
-      this->data.workingData.currentBand = whichBandOption;
+      this->data.workingData.currentBand = data.user_bands[whichBandOption];
       // If SelectBand returns 4, the user exited before selecting a band.  Return to top menu.
       if (whichBandOption == 4)
       {
@@ -898,7 +898,7 @@ void DisplayManagement::ProcessPresets()
       minSWRAuto = AutoTuneSWR(data.user_bands[whichBandOption], data.workingData.currentFrequency);
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
       GraphAxis(data.user_bands[whichBandOption]);
-      PlotSWRValueNew(data.user_bands[whichBandOption], tempCurrentPosition, tempSWR, SWRMinPosition);
+      PlotSWRValueNew(whichBandOption, tempCurrentPosition, tempSWR, SWRMinPosition);
       delay(5000);
       state = State::state2; // Move to Select Preset state.
       break;
@@ -1133,7 +1133,7 @@ void DisplayManagement::ManualFrequencyControl(int whichBandOption)
     frequencyEncoderMovement = 0;
     frequencyEncoderMovement2 = 0;
   }
-  PlotNewStartingFrequency(data.user_bands[whichBandOption]);
+  PlotNewStartingFrequency(whichBandOption);
   ShowSubmenuData(swr.ReadSWRValue(), frequency);
 }
 
