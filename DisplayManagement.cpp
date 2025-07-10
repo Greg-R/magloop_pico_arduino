@@ -29,6 +29,8 @@
 */
 
 #include "DisplayManagement.h"
+#include "Configuration.h"
+#include <cstdint>
 
 DisplayManagement::DisplayManagement(Adafruit_ILI9341 &tft, DDS &dds, SWR &swr,
                                      StepperManagement &stepper, TmcStepper &tmcstepper,
@@ -193,7 +195,7 @@ void DisplayManagement::frequencyMenuOption()
     case State::state0:
       return; //  Exit frequency selection and return to top menu Freq.
     case State::state1:
-      whichBandOption = SelectBand(data.bands, 130, 110); // state1
+      whichBandOption = SelectBand(data.bands, 130, 80); // state1
 
       // If SelectBand returns 4, this means the menu was exited without selecting a band.  Move to the top level menu Freq.
       if (whichBandOption == 4)
@@ -204,8 +206,8 @@ void DisplayManagement::frequencyMenuOption()
 //      if (whichBandOption == this->data.workingData.currentBand)
 //        frequency = data.workingData.currentFrequency;
 //      else
-        frequency = data.workingData.lastFreq[whichBandOption]; // Set initial frequency for each band from Preset list
-      this->data.workingData.currentBand = whichBandOption;                 //  Update the current band.
+        frequency = data.workingData.lastFreq[user_bands[whichBandOption]]; // Set initial frequency for each band from Preset list
+      this->data.workingData.currentBand = user_bands[whichBandOption];                 //  Update the current band.
       state = State::state2;                                                // Proceed to manual frequency adjustment state.
       break;
     case State::state2:
@@ -494,14 +496,15 @@ int DisplayManagement::SelectBand(std::vector<std::string> bands, int coorX, int
   tft.setTextSize(1);
   tft.setFont(&FreeSerif12pt7b);
   tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
-  for (unsigned int i = 0; i < bands.size(); i++)
+  for (unsigned int i = 0; i < NUMBER_BANDS; i++)
   {
     tft.setCursor(coorX, coorY + i * 30);
-    tft.print(bands[i].c_str());
+//    tft.print(bands[i].c_str());
+    tft.print(bands[user_bands[i]].c_str());  // Print user selected bands to display.
   }
   tft.setCursor(coorX, coorY);
   tft.setTextColor(ILI9341_BLUE, ILI9341_WHITE);
-  tft.print(bands[0].c_str());
+  tft.print(bands[user_bands[0]].c_str());
   index = 0;
 
   // State Machine.  Calling this function enters this loop and stays until Enter or Exit is pressed.
@@ -513,7 +516,7 @@ int DisplayManagement::SelectBand(std::vector<std::string> bands, int coorX, int
       if (menuEncoderMovement == 1)
       {
         index++;
-        if ((unsigned)index == bands.size())
+        if ((unsigned)index == NUMBER_BANDS)
         { // wrap to first index
           index = 0;
         }
@@ -523,19 +526,19 @@ int DisplayManagement::SelectBand(std::vector<std::string> bands, int coorX, int
         index--;
         if (index < 0)
         { // wrap to last index
-          index = 2;
+          index = NUMBER_BANDS - 1;
         }
       }
       menuEncoderMovement = 0;
       tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
-      for (unsigned int i = 0; i < bands.size(); i++)
+      for (unsigned int i = 0; i < NUMBER_BANDS; i++)
       {
         tft.setCursor(coorX, coorY + i * 30);
-        tft.print(bands[i].c_str());
+        tft.print(bands[user_bands[i]].c_str());
       }
       tft.setTextColor(ILI9341_BLUE, ILI9341_WHITE);
       tft.setCursor(coorX, coorY + index * 30);
-      tft.print(bands[index].c_str());
+      tft.print(bands[user_bands[index]].c_str());
     }
     // Poll buttons.
     enterbutton.buttonPushed();

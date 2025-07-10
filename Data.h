@@ -32,7 +32,8 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
-#include "Configuration.h"
+// #include "Configuration.h"
+
 
 //  This class is intended to manage various frequency and position related constants and variables.
 //  The single object will be referenced by most or maybe all of the other class objects.
@@ -59,29 +60,32 @@ const std::string releaseDate = "8-26-24";
   // Bands:
 
   std::vector<std::string> bands = {"80M", "60M", "40M", "30M", "20M", "17M", "12M", "10M"};
-  static const uint32_t LOWEND80M = 3500000;
+  static const uint32_t LOWEND80M  = 3500000;
   static const uint32_t HIGHEND80M = 4000000;
 
-  static const uint32_t LOWEND60M = 3500000;
-  static const uint32_t HIGHEND60M = 4000000; 
+  static const uint32_t LOWEND60M  = 5330000;
+  static const uint32_t HIGHEND60M = 5410000; 
 
-  static const uint32_t LOWEND40M = 7000000;
+  static const uint32_t LOWEND40M  = 7000000;
   static const uint32_t HIGHEND40M = 7300000;
 
-  static const uint32_t LOWEND30M = 10100000;
+  static const uint32_t LOWEND30M  = 10100000;
   static const uint32_t HIGHEND30M = 10150000;
 
-  static const uint32_t LOWEND20M = 14000000;
+  static const uint32_t LOWEND20M  = 14000000;
   static const uint32_t HIGHEND20M = 14350000;
 
-  static const uint32_t LOWEND17M = 14000000;
-  static const uint32_t HIGHEND17M = 14350000;
+  static const uint32_t LOWEND17M  = 18068000;
+  static const uint32_t HIGHEND17M = 18168000;
 
-  static const uint32_t LOWEND12M = 14000000;
-  static const uint32_t HIGHEND12M = 14350000;
+  static const uint32_t LOWEND15M  = 21000000;
+  static const uint32_t HIGHEND15M = 21450000;
 
-  static const uint32_t LOWEND10M = 14000000;
-  static const uint32_t HIGHEND10M = 14350000;
+  static const uint32_t LOWEND12M  = 24890000;
+  static const uint32_t HIGHEND12M = 24990000;
+
+  static const uint32_t LOWEND10M  = 28000000;
+  static const uint32_t HIGHEND10M = 29700000;
 
 
   // Preset frequency constants in the dataStruct are initial defaults; these defaults are saved to the
@@ -89,25 +93,26 @@ const std::string releaseDate = "8-26-24";
   // be read from the EEPROM.
   struct dataStruct
   {
-    uint32_t presetFrequencies[8][6] =
+    uint32_t presetFrequencies[9][6] =
         {
-            {3503000L, 3504000L, 3600000L, 3615000L, 3750000L, 3900000L},       // 80M
-            {3503000L, 3504000L, 3600000L, 3615000L, 3750000L, 3900000L},       // 60M                  
-            {7030000L, 7040000L, 7100000L, 7150000L, 7250000L, 7285000L},       // 40M
-            {10106000L, 10116000L, 10120000L, 10130000L, 10140000L, 10145000L}, // 30M
-            {14030000L, 14060000L, 14100000L, 14200000L, 14250000L, 14285000L},  // 20M
-            {14030000L, 14060000L, 14100000L, 14200000L, 14250000L, 14285000L},  // 17M
-            {14030000L, 14060000L, 14100000L, 14200000L, 14250000L, 14285000L},  // 12M
-            {14030000L, 14060000L, 14100000L, 14200000L, 14250000L, 14285000L}  // 10M
+            {3503000, 3504000, 3600000, 3615000, 3750000, 3900000},       // 80M
+            {5330500, 5346500, 5357000, 5371500, 5403500, 5403500},       // 60M.  This band is channelized.              
+            {7030000, 7040000, 7100000, 7150000, 7250000, 7285000},       // 40M
+            {10106000, 10116000, 10120000, 10130000, 10140000, 10145000}, // 30M
+            {14030000, 14060000, 14100000, 14200000, 14250000, 14285000},  // 20M
+            {14030000, 14060000, 14100000, 14200000, 14250000, 14285000},  // 17M
+            {14030000, 14060000, 14100000, 14200000, 14250000, 14285000},  // 15M            
+            {14030000, 14060000, 14100000, 14200000, 14250000, 14285000},  // 12M
+            {14030000, 14060000, 14100000, 14200000, 14250000, 14285000}  // 10M
     };
-    uint32_t bandLimitPositionCounts[3][2];
-    uint32_t bandEdges[3][2]; // = { // Band edges in Hz
+    uint32_t bandLimitPositionCounts[9][2];
+    uint32_t bandEdges[9][2]; // = { // Band edges in Hz
                               //   {LOWEND40M, HIGHEND40M},
                               //   {LOWEND30M, HIGHEND30M},
                               //   {LOWEND20M, HIGHEND20M}};
     uint32_t currentBand = 0;
     uint32_t currentFrequency = 7150000;
-    uint32_t lastFreq[6];  // Used to remember the last autotune frequency.
+    uint32_t lastFreq[9] = {0};  // Used to remember the last autotune frequency.
     uint32_t initialized = 0x55555555;
     uint32_t calibrated; //  Please run Initial Calibration! if not set to correct value.
     uint32_t hardware;   //  0x55555555 means hardware is accepted.
@@ -122,8 +127,8 @@ const std::string releaseDate = "8-26-24";
   } workingData;
 
   //  This should be made variable length arrays.
-  float countPerHertz[NUMBER_BANDS];
-  float hertzPerStepperUnitVVC[NUMBER_BANDS]; // Voltage Variable Cap
+  float countPerHertz[9];
+  float hertzPerStepperUnitVVC[9]; // Voltage Variable Cap
 
   // GPIO assignments.
   //  Buttons

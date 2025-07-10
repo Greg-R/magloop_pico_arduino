@@ -30,10 +30,11 @@
 */
 
 // #define PICO_STACK_SIZE _u(0x1000)  // Uncomment if stack gets blown.  This doubles stack size.//
+//#include "Configuration.h"
 #include <Arduino.h>
 #include <SPI.h>
 #include <Adafruit_ILI9341.h>
-#include "DisplayManagement.h"
+#include "DisplayManagement.h"  // Includes Configuration.h
 #include <AccelStepper.h>
 #include "StepperManagement.h"
 #include "DDS.h"
@@ -44,7 +45,6 @@
 #include "TuneInputs.h"
 #include "TmcStepper.h"
 #include "Hardware.h"
-#include "Configuration.h"
 
 int currentFrequency;
 int bypassTest = 5;  // Set to arbitrary value other than 0 or 10.
@@ -130,12 +130,12 @@ void setup() {
 
   //  Now examine the data in the buffer to see if the EEPROM should be initialized.
   //  There is a specific number written to the EEPROM when it is initialized.
-  if (data.workingData.initialized != 0x55555555) {
+////  if (data.workingData.initialized != 0x55555555) {
     data.writeDefaultValues();  //  Writes default values in to the dataStruct in the Data object.
     EEPROM.put(0, data.workingData);
     EEPROM.commit();
     EEPROM.get(0, data.workingData);  // Read the workingData struct from EEPROM.
-  } else EEPROM.get(0, data.workingData);
+////  } else EEPROM.get(0, data.workingData);
 
   enterbutton.initialize();
   exitbutton.initialize();

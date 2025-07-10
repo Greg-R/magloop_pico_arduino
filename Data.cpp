@@ -39,13 +39,24 @@ Data::Data()
 void Data::computeSlopes()
 {
    countPerHertz[0] = ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]) / ((float)HIGHEND80M - (float)LOWEND80M);
-   countPerHertz[1] = ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]) / ((float)HIGHEND40M - (float)LOWEND40M);
-   countPerHertz[2] = ((float)workingData.bandLimitPositionCounts[1][1] - (float)workingData.bandLimitPositionCounts[1][0]) / ((float)HIGHEND30M - (float)LOWEND30M);
-   countPerHertz[3] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND20M - (float)LOWEND20M);
+   countPerHertz[1] = ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]) / ((float)HIGHEND60M - (float)LOWEND60M);
+   countPerHertz[2] = ((float)workingData.bandLimitPositionCounts[1][1] - (float)workingData.bandLimitPositionCounts[1][0]) / ((float)HIGHEND40M - (float)LOWEND40M);
+   countPerHertz[3] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND30M - (float)LOWEND30M);
+   countPerHertz[4] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND20M - (float)LOWEND20M);
+   countPerHertz[5] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND17M - (float)LOWEND17M);
+   countPerHertz[6] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND15M - (float)LOWEND15M);
+   countPerHertz[7] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND12M - (float)LOWEND12M);
+   countPerHertz[8] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND10M - (float)LOWEND10M);
+
    hertzPerStepperUnitVVC[0] = ((float)HIGHEND80M - (float)LOWEND80M) / ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]);
-   hertzPerStepperUnitVVC[1] = ((float)HIGHEND40M - (float)LOWEND40M) / ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]);
-   hertzPerStepperUnitVVC[2] = ((float)HIGHEND30M - (float)LOWEND30M) / ((float)workingData.bandLimitPositionCounts[1][1] - (float)workingData.bandLimitPositionCounts[1][0]);
-   hertzPerStepperUnitVVC[3] = ((float)HIGHEND20M - (float)LOWEND20M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
+   hertzPerStepperUnitVVC[1] = ((float)HIGHEND60M - (float)LOWEND60M) / ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]);
+   hertzPerStepperUnitVVC[2] = ((float)HIGHEND40M - (float)LOWEND40M) / ((float)workingData.bandLimitPositionCounts[1][1] - (float)workingData.bandLimitPositionCounts[1][0]);
+   hertzPerStepperUnitVVC[3] = ((float)HIGHEND30M - (float)LOWEND30M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
+   hertzPerStepperUnitVVC[4] = ((float)HIGHEND20M - (float)LOWEND20M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
+   hertzPerStepperUnitVVC[5] = ((float)HIGHEND17M - (float)LOWEND17M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
+   hertzPerStepperUnitVVC[6] = ((float)HIGHEND15M - (float)LOWEND15M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
+   hertzPerStepperUnitVVC[7] = ((float)HIGHEND12M - (float)LOWEND12M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
+   hertzPerStepperUnitVVC[8] = ((float)HIGHEND10M - (float)LOWEND10M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
 }
 
 void Data::writeDefaultValues()
@@ -71,23 +82,95 @@ void Data::writeDefaultValues()
    workingData.presetFrequencies[2][4] = 14250000L;
    workingData.presetFrequencies[2][5] = 14285000L;
 
+   workingData.presetFrequencies[3][0] = 14030000L;
+   workingData.presetFrequencies[3][1] = 14060000L;
+   workingData.presetFrequencies[3][2] = 14100000L;
+   workingData.presetFrequencies[3][3] = 14200000L;
+   workingData.presetFrequencies[3][4] = 14250000L;
+   workingData.presetFrequencies[3][5] = 14285000L;   
+
+   workingData.presetFrequencies[4][0] = 14030000L;
+   workingData.presetFrequencies[4][1] = 14060000L;
+   workingData.presetFrequencies[4][2] = 14100000L;
+   workingData.presetFrequencies[4][3] = 14200000L;
+   workingData.presetFrequencies[4][4] = 14250000L;
+   workingData.presetFrequencies[4][5] = 14285000L;
+
+   workingData.presetFrequencies[5][0] = 14030000L;
+   workingData.presetFrequencies[5][1] = 14060000L;
+   workingData.presetFrequencies[5][2] = 14100000L;
+   workingData.presetFrequencies[5][3] = 14200000L;
+   workingData.presetFrequencies[5][4] = 14250000L;
+   workingData.presetFrequencies[5][5] = 14285000L;   
+
+   workingData.presetFrequencies[6][0] = 14030000L;
+   workingData.presetFrequencies[6][1] = 14060000L;
+   workingData.presetFrequencies[6][2] = 14100000L;
+   workingData.presetFrequencies[6][3] = 14200000L;
+   workingData.presetFrequencies[6][4] = 14250000L;
+   workingData.presetFrequencies[6][5] = 14285000L;
+
+   workingData.presetFrequencies[7][0] = 14030000L;
+   workingData.presetFrequencies[7][1] = 14060000L;
+   workingData.presetFrequencies[7][2] = 14100000L;
+   workingData.presetFrequencies[7][3] = 14200000L;
+   workingData.presetFrequencies[7][4] = 14250000L;
+   workingData.presetFrequencies[7][5] = 14285000L;
+
+   workingData.presetFrequencies[8][0] = 14030000L;
+   workingData.presetFrequencies[8][1] = 14060000L;
+   workingData.presetFrequencies[8][2] = 14100000L;
+   workingData.presetFrequencies[8][3] = 14200000L;
+   workingData.presetFrequencies[8][4] = 14250000L;
+   workingData.presetFrequencies[8][5] = 14285000L;
+
    workingData.bandLimitPositionCounts[0][0] = 0;
    workingData.bandLimitPositionCounts[0][1] = 0;
    workingData.bandLimitPositionCounts[1][0] = 0;
    workingData.bandLimitPositionCounts[1][1] = 0;
    workingData.bandLimitPositionCounts[2][0] = 0;
    workingData.bandLimitPositionCounts[2][1] = 0;
+   workingData.bandLimitPositionCounts[3][0] = 0;
+   workingData.bandLimitPositionCounts[3][1] = 0;
+   workingData.bandLimitPositionCounts[4][0] = 0;
+   workingData.bandLimitPositionCounts[4][1] = 0;
+   workingData.bandLimitPositionCounts[5][0] = 0;
+   workingData.bandLimitPositionCounts[5][1] = 0;
+   workingData.bandLimitPositionCounts[6][0] = 0;
+   workingData.bandLimitPositionCounts[6][1] = 0;
+   workingData.bandLimitPositionCounts[7][0] = 0;
+   workingData.bandLimitPositionCounts[7][1] = 0;
+   workingData.bandLimitPositionCounts[8][0] = 0;
+   workingData.bandLimitPositionCounts[8][1] = 0;
 
-   workingData.bandEdges[0][0] = LOWEND40M;
-   workingData.bandEdges[0][1] = HIGHEND40M;
-   workingData.bandEdges[1][0] = LOWEND30M;
-   workingData.bandEdges[1][1] = HIGHEND30M;
-   workingData.bandEdges[2][0] = LOWEND20M;
-   workingData.bandEdges[2][1] = HIGHEND20M;
+   workingData.bandEdges[0][0] = LOWEND80M;
+   workingData.bandEdges[0][1] = HIGHEND80M;
+   workingData.bandEdges[1][0] = LOWEND60M;
+   workingData.bandEdges[1][1] = HIGHEND60M;
+   workingData.bandEdges[2][0] = LOWEND40M;
+   workingData.bandEdges[2][1] = HIGHEND40M;
+   workingData.bandEdges[3][0] = LOWEND30M;
+   workingData.bandEdges[3][1] = HIGHEND30M;
+   workingData.bandEdges[4][0] = LOWEND20M;
+   workingData.bandEdges[4][1] = HIGHEND20M;
+   workingData.bandEdges[5][0] = LOWEND17M;
+   workingData.bandEdges[5][1] = HIGHEND17M;
+   workingData.bandEdges[5][0] = LOWEND15M;
+   workingData.bandEdges[5][1] = HIGHEND15M;
+   workingData.bandEdges[5][0] = LOWEND12M;
+   workingData.bandEdges[5][1] = HIGHEND12M;
+   workingData.bandEdges[5][0] = LOWEND10M;
+   workingData.bandEdges[5][1] = HIGHEND10M;
 
-   workingData.lastFreq[0] =  7150000;
-   workingData.lastFreq[1] = 10130000;
-   workingData.lastFreq[2] = 14200000;
+   workingData.lastFreq[0] =  3550000;
+   workingData.lastFreq[1] =  5357000;
+   workingData.lastFreq[2] =  7100000;
+   workingData.lastFreq[3] = 10125000;
+   workingData.lastFreq[4] = 14200000;
+   workingData.lastFreq[5] = 18100000;
+   workingData.lastFreq[6] = 21200000;
+   workingData.lastFreq[7] = 24950000;
+   workingData.lastFreq[8] = 28500000;         
 
    workingData.currentBand = 0;
    workingData.currentFrequency = 7150000;
