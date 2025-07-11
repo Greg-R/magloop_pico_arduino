@@ -56,11 +56,17 @@ void GraphPlot::GraphAxis(int whichBandOption) // al modified 9-8-19
   float freqEnd = 0;
   float pip = 0.0;
   //  This needs update to use band limit variables, not hard coded???
+
+//    freqCount = static_cast<float>(data.LOWEND40M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND40M) / 1000000.0;
+   freqCount = data.workingData.bandEdges[data.user_bands[whichBandOption]][0];
+   freqEnd   = data.workingData.bandEdges[data.user_bands[whichBandOption]][1];
+
   switch (whichBandOption)
   {
   case 0:
-    freqCount = static_cast<float>(data.LOWEND40M) / 1000000.0;
-    freqEnd = static_cast<float>(data.HIGHEND40M) / 1000000.0;
+//    freqCount = static_cast<float>(data.LOWEND40M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND40M) / 1000000.0;
     pip = 0.1;
     chunks = 3;
     xDotIncrement = 12;
@@ -68,22 +74,77 @@ void GraphPlot::GraphAxis(int whichBandOption) // al modified 9-8-19
     break;
 
   case 1:
-    freqCount = static_cast<float>(data.LOWEND30M) / 1000000.0;
-    freqEnd = static_cast<float>(data.HIGHEND30M) / 1000000.0;
+//    freqCount = static_cast<float>(data.LOWEND30M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND30M) / 1000000.0;
     pip = 0.02;
     chunks = 3;
     xDotIncrement = 20;
     break;
 
   case 2:
-    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
-    freqEnd = static_cast<float>(data.HIGHEND20M) / 1000000.0;
+//    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND20M) / 1000000.0;
+    pip = 0.10;
+    chunks = 3;
+    xDotIncrement = 12;
+    xIncrement = (XAXISEND * (.3 / .35) - XAXISSTART) / chunks;
+    break;
+
+  case 3:
+//    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND20M) / 1000000.0;
+    pip = 0.10;
+    chunks = 3;
+    xDotIncrement = 12;
+    xIncrement = (XAXISEND * (.3 / .35) - XAXISSTART) / chunks;
+    break;
+
+  case 4:
+//    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND20M) / 1000000.0;
+    pip = 0.10;
+    chunks = 3;
+    xDotIncrement = 12;
+    xIncrement = (XAXISEND * (.3 / .35) - XAXISSTART) / chunks;
+    break;
+
+  case 5:
+//    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND20M) / 1000000.0;
+    pip = 0.10;
+    chunks = 3;
+    xDotIncrement = 12;
+    xIncrement = (XAXISEND * (.3 / .35) - XAXISSTART) / chunks;
+    break;
+
+  case 6:
+//    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND20M) / 1000000.0;
+    pip = 0.10;
+    chunks = 3;
+    xDotIncrement = 12;
+    xIncrement = (XAXISEND * (.3 / .35) - XAXISSTART) / chunks;
+    break;
+
+  case 7:
+//    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND20M) / 1000000.0;
+    pip = 0.10;
+    chunks = 3;
+    xDotIncrement = 12;
+    xIncrement = (XAXISEND * (.3 / .35) - XAXISSTART) / chunks;
+    break;
+
+  case 8:
+//    freqCount = static_cast<float>(data.LOWEND20M) / 1000000.0;
+//    freqEnd = static_cast<float>(data.HIGHEND20M) / 1000000.0;
     pip = 0.10;
     chunks = 3;
     xDotIncrement = 12;
     xIncrement = (XAXISEND * (.3 / .35) - XAXISSTART) / chunks;
     break;
   }
+
   //tcolor = ILI9341_YELLOW;
   //bcolor = ILI9341_BLACK;
   tickCount = 4;

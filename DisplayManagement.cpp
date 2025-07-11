@@ -223,10 +223,10 @@ void DisplayManagement::frequencyMenuOption()
       EEPROM.put(0, data.workingData);
       EEPROM.commit(); // Write to EEPROM.
       tft.fillRect(0, 100, 311, 150, ILI9341_BLACK); // ???
-      minSWRAuto = AutoTuneSWR(data.user_bands[whichBandOption], frequency); // Auto tune here
+      minSWRAuto = AutoTuneSWR(whichBandOption, frequency); // Auto tune here
       // After AutoTune, do full update of display with SWR vs. frequency plot:
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
-      GraphAxis(data.user_bands[whichBandOption]);
+      GraphAxis(whichBandOption);
       PlotSWRValueNew(whichBandOption, tempCurrentPosition, tempSWR, SWRMinPosition);
       delay(5000);
       break; //  state is not changed; should go back to state2.
@@ -812,7 +812,7 @@ void DisplayManagement::DoSingleBandCalibrate(int whichBandOption)
       }
 //      currentSWR = swr.ReadSWRValue();
       updateMessageTop("Auto Tuning");
-      minSWRAuto = AutoTuneSWR(data.user_bands[whichBandOption], frequency);
+      minSWRAuto = AutoTuneSWR(whichBandOption, frequency);
       ShowSubmenuData(minSWRAuto, dds.currentFrequency); // Update SWR value
       if (minSWRAuto < TARGETMAXSWR)
       { // Ignore values greater than Target Max
@@ -895,9 +895,9 @@ void DisplayManagement::ProcessPresets()
       this->data.workingData.currentFrequency = frequency;
       EEPROM.put(0, data.workingData);
       EEPROM.commit();
-      minSWRAuto = AutoTuneSWR(data.user_bands[whichBandOption], data.workingData.currentFrequency);
+      minSWRAuto = AutoTuneSWR(whichBandOption, data.workingData.currentFrequency);
       ShowSubmenuData(minSWRAuto, dds.currentFrequency);
-      GraphAxis(data.user_bands[whichBandOption]);
+      GraphAxis(whichBandOption);
       PlotSWRValueNew(whichBandOption, tempCurrentPosition, tempSWR, SWRMinPosition);
       delay(5000);
       state = State::state2; // Move to Select Preset state.
@@ -1022,7 +1022,7 @@ float DisplayManagement::AutoTuneSWR(uint32_t band, uint32_t frequency)
   // This is an estimation of the position based on results from the initial calibration band ends positions.
   else
   {
-    position = -data.workingData.backlash + data.workingData.bandLimitPositionCounts[band][0] + static_cast<int>(static_cast<float>(frequency - data.workingData.bandEdges[band][0]) / data.hertzPerStepperUnitVVC[band]);
+    position = -data.workingData.backlash + data.workingData.bandLimitPositionCounts[data.user_bands[band]][0] + static_cast<int>(static_cast<float>(frequency - data.workingData.bandEdges[data.user_bands[band]][0]) / data.hertzPerStepperUnitVVC[data.user_bands[band]]);
     // Power to the stepper, bridge, and relay, unless calibrating.  If calibrating, calibration routine will control power.
     PowerStepDdsCirRelay(true, frequency, true, true);
     //  Move the stepper to the approximate location based on the current frequency:
@@ -1105,7 +1105,7 @@ void DisplayManagement::ManualFrequencyControl(int whichBandOption)
   //int yTick = YAXISSTART + 5;
   bool lastenterbutton = true;
   frequencyEncoderMovement = 0;
-  GraphAxis(data.user_bands[whichBandOption]);
+  GraphAxis(whichBandOption);
   if (frequencyEncoderMovement2 != 0)
   {
     frequencyOld = dds.currentFrequency;

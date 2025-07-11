@@ -134,7 +134,7 @@ void StepperManagement::ResetStepperToZero()
   Return value:
     void
 
-  CAUTION:
+  THIS FUNCTION IS NOT USED
 
 *****/
 long StepperManagement::ConvertFrequencyToStepperCount(uint32_t presentFrequency)

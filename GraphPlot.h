@@ -38,6 +38,7 @@
 #include "DDS.h"
 #include "Data.h"
 #include <Fonts/FreeSerif9pt7b.h>
+#include "Data.h"
 
 class GraphPlot
 {

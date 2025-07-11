@@ -39,24 +39,24 @@ Data::Data()
 void Data::computeSlopes()
 {
    countPerHertz[0] = ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]) / ((float)HIGHEND80M - (float)LOWEND80M);
-   countPerHertz[1] = ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]) / ((float)HIGHEND60M - (float)LOWEND60M);
-   countPerHertz[2] = ((float)workingData.bandLimitPositionCounts[1][1] - (float)workingData.bandLimitPositionCounts[1][0]) / ((float)HIGHEND40M - (float)LOWEND40M);
-   countPerHertz[3] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND30M - (float)LOWEND30M);
-   countPerHertz[4] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND20M - (float)LOWEND20M);
-   countPerHertz[5] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND17M - (float)LOWEND17M);
-   countPerHertz[6] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND15M - (float)LOWEND15M);
-   countPerHertz[7] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND12M - (float)LOWEND12M);
-   countPerHertz[8] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND10M - (float)LOWEND10M);
+   countPerHertz[1] = ((float)workingData.bandLimitPositionCounts[1][1] - (float)workingData.bandLimitPositionCounts[1][0]) / ((float)HIGHEND60M - (float)LOWEND60M);
+   countPerHertz[2] = ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]) / ((float)HIGHEND40M - (float)LOWEND40M);
+   countPerHertz[3] = ((float)workingData.bandLimitPositionCounts[3][1] - (float)workingData.bandLimitPositionCounts[3][0]) / ((float)HIGHEND30M - (float)LOWEND30M);
+   countPerHertz[4] = ((float)workingData.bandLimitPositionCounts[4][1] - (float)workingData.bandLimitPositionCounts[4][0]) / ((float)HIGHEND20M - (float)LOWEND20M);
+   countPerHertz[5] = ((float)workingData.bandLimitPositionCounts[5][1] - (float)workingData.bandLimitPositionCounts[5][0]) / ((float)HIGHEND17M - (float)LOWEND17M);
+   countPerHertz[6] = ((float)workingData.bandLimitPositionCounts[6][1] - (float)workingData.bandLimitPositionCounts[6][0]) / ((float)HIGHEND15M - (float)LOWEND15M);
+   countPerHertz[7] = ((float)workingData.bandLimitPositionCounts[7][1] - (float)workingData.bandLimitPositionCounts[7][0]) / ((float)HIGHEND12M - (float)LOWEND12M);
+   countPerHertz[8] = ((float)workingData.bandLimitPositionCounts[8][1] - (float)workingData.bandLimitPositionCounts[8][0]) / ((float)HIGHEND10M - (float)LOWEND10M);
 
    hertzPerStepperUnitVVC[0] = ((float)HIGHEND80M - (float)LOWEND80M) / ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]);
-   hertzPerStepperUnitVVC[1] = ((float)HIGHEND60M - (float)LOWEND60M) / ((float)workingData.bandLimitPositionCounts[0][1] - (float)workingData.bandLimitPositionCounts[0][0]);
-   hertzPerStepperUnitVVC[2] = ((float)HIGHEND40M - (float)LOWEND40M) / ((float)workingData.bandLimitPositionCounts[1][1] - (float)workingData.bandLimitPositionCounts[1][0]);
-   hertzPerStepperUnitVVC[3] = ((float)HIGHEND30M - (float)LOWEND30M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
-   hertzPerStepperUnitVVC[4] = ((float)HIGHEND20M - (float)LOWEND20M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
-   hertzPerStepperUnitVVC[5] = ((float)HIGHEND17M - (float)LOWEND17M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
-   hertzPerStepperUnitVVC[6] = ((float)HIGHEND15M - (float)LOWEND15M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
-   hertzPerStepperUnitVVC[7] = ((float)HIGHEND12M - (float)LOWEND12M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
-   hertzPerStepperUnitVVC[8] = ((float)HIGHEND10M - (float)LOWEND10M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
+   hertzPerStepperUnitVVC[1] = ((float)HIGHEND60M - (float)LOWEND60M) / ((float)workingData.bandLimitPositionCounts[1][1] - (float)workingData.bandLimitPositionCounts[1][0]);
+   hertzPerStepperUnitVVC[2] = ((float)HIGHEND40M - (float)LOWEND40M) / ((float)workingData.bandLimitPositionCounts[2][1] - (float)workingData.bandLimitPositionCounts[2][0]);
+   hertzPerStepperUnitVVC[3] = ((float)HIGHEND30M - (float)LOWEND30M) / ((float)workingData.bandLimitPositionCounts[3][1] - (float)workingData.bandLimitPositionCounts[3][0]);
+   hertzPerStepperUnitVVC[4] = ((float)HIGHEND20M - (float)LOWEND20M) / ((float)workingData.bandLimitPositionCounts[4][1] - (float)workingData.bandLimitPositionCounts[4][0]);
+   hertzPerStepperUnitVVC[5] = ((float)HIGHEND17M - (float)LOWEND17M) / ((float)workingData.bandLimitPositionCounts[5][1] - (float)workingData.bandLimitPositionCounts[5][0]);
+   hertzPerStepperUnitVVC[6] = ((float)HIGHEND15M - (float)LOWEND15M) / ((float)workingData.bandLimitPositionCounts[6][1] - (float)workingData.bandLimitPositionCounts[6][0]);
+   hertzPerStepperUnitVVC[7] = ((float)HIGHEND12M - (float)LOWEND12M) / ((float)workingData.bandLimitPositionCounts[7][1] - (float)workingData.bandLimitPositionCounts[7][0]);
+   hertzPerStepperUnitVVC[8] = ((float)HIGHEND10M - (float)LOWEND10M) / ((float)workingData.bandLimitPositionCounts[8][1] - (float)workingData.bandLimitPositionCounts[8][0]);
 }
 
 void Data::writeDefaultValues()
