@@ -124,7 +124,9 @@ std::vector<uint32_t> user_bands = {band0, band1, band2, band3, band4};
   // be read from the EEPROM.
   struct dataStruct
   {
-    uint32_t presetFrequencies[9][6] =
+    uint32_t presetFrequencies[9][6];
+/*
+     =
         {
             {3503000, 3504000, 3600000, 3615000, 3750000, 3900000},       // 80M
             {5330500, 5346500, 5357000, 5371500, 5403500, 5403500},       // 60M.  This band is channelized.              
@@ -136,25 +138,26 @@ std::vector<uint32_t> user_bands = {band0, band1, band2, band3, band4};
             {14030000, 14060000, 14100000, 14200000, 14250000, 14285000},  // 12M
             {14030000, 14060000, 14100000, 14200000, 14250000, 14285000}   // 10M
     };
+    */
     uint32_t bandLimitPositionCounts[9][2];
     uint32_t bandEdges[9][2]; // = { // Band edges in Hz
                               //   {LOWEND40M, HIGHEND40M},
                               //   {LOWEND30M, HIGHEND30M},
                               //   {LOWEND20M, HIGHEND20M}};
-    uint32_t currentBand = 0;
-    uint32_t currentFrequency = 7150000;
-    uint32_t lastFreq[9] = {0};  // Used to remember the last autotune frequency.
-    uint32_t initialized = 0x55555555;
+    uint32_t currentBand;
+    uint32_t currentFrequency;
+    uint32_t lastFreq[9];  // Used to remember the last autotune frequency.
+    uint32_t initialized;
     uint32_t calibrated; //  Please run Initial Calibration! if not set to correct value.
     uint32_t hardware;   //  0x55555555 means hardware is accepted.
   // The following are parameters which must be "tuned" to the particular mechanics in use.
   // Refer to the documentation for setting these values.
-  int zero_offset = 0; // 600 for full step.  1000 for half-step.  270 for dummy with 1/16 step.
-  int backlash = 0;
-  int coarse_sweep = 1;
-  int accel = 2000;
-  int speed = 500;
-  bool rotation = false;
+  int zero_offset; // 600 for full step.  1000 for half-step.  270 for dummy with 1/16 step.
+  int backlash;
+  int coarse_sweep;
+  int accel;
+  int speed;
+  bool rotation;
   } workingData;
 
   //  This should be made variable length arrays.

@@ -89,40 +89,40 @@ void Data::writeDefaultValues()
    workingData.presetFrequencies[3][4] = 10140000;
    workingData.presetFrequencies[3][5] = 10145000;   
 
-   workingData.presetFrequencies[4][0] = 14030000L;
-   workingData.presetFrequencies[4][1] = 14060000L;
-   workingData.presetFrequencies[4][2] = 14100000L;
-   workingData.presetFrequencies[4][3] = 14200000L;
-   workingData.presetFrequencies[4][4] = 14250000L;
-   workingData.presetFrequencies[4][5] = 14285000L;
+   workingData.presetFrequencies[4][0] = 14030000;
+   workingData.presetFrequencies[4][1] = 14060000;
+   workingData.presetFrequencies[4][2] = 14100000;
+   workingData.presetFrequencies[4][3] = 14200000;
+   workingData.presetFrequencies[4][4] = 14250000;
+   workingData.presetFrequencies[4][5] = 14285000;
 
-   workingData.presetFrequencies[5][0] = 14030000L;
-   workingData.presetFrequencies[5][1] = 14060000L;
-   workingData.presetFrequencies[5][2] = 14100000L;
-   workingData.presetFrequencies[5][3] = 14200000L;
-   workingData.presetFrequencies[5][4] = 14250000L;
-   workingData.presetFrequencies[5][5] = 14285000L;   
+   workingData.presetFrequencies[5][0] = 14030000;
+   workingData.presetFrequencies[5][1] = 14060000;
+   workingData.presetFrequencies[5][2] = 14100000;
+   workingData.presetFrequencies[5][3] = 14200000;
+   workingData.presetFrequencies[5][4] = 14250000;
+   workingData.presetFrequencies[5][5] = 14285000;   
 
-   workingData.presetFrequencies[6][0] = 14030000L;
-   workingData.presetFrequencies[6][1] = 14060000L;
-   workingData.presetFrequencies[6][2] = 14100000L;
-   workingData.presetFrequencies[6][3] = 14200000L;
-   workingData.presetFrequencies[6][4] = 14250000L;
-   workingData.presetFrequencies[6][5] = 14285000L;
+   workingData.presetFrequencies[6][0] = 14030000;
+   workingData.presetFrequencies[6][1] = 14060000;
+   workingData.presetFrequencies[6][2] = 14100000;
+   workingData.presetFrequencies[6][3] = 14200000;
+   workingData.presetFrequencies[6][4] = 14250000;
+   workingData.presetFrequencies[6][5] = 14285000;
 
-   workingData.presetFrequencies[7][0] = 14030000L;
-   workingData.presetFrequencies[7][1] = 14060000L;
-   workingData.presetFrequencies[7][2] = 14100000L;
-   workingData.presetFrequencies[7][3] = 14200000L;
-   workingData.presetFrequencies[7][4] = 14250000L;
-   workingData.presetFrequencies[7][5] = 14285000L;
+   workingData.presetFrequencies[7][0] = 14030000;
+   workingData.presetFrequencies[7][1] = 14060000;
+   workingData.presetFrequencies[7][2] = 14100000;
+   workingData.presetFrequencies[7][3] = 14200000;
+   workingData.presetFrequencies[7][4] = 14250000;
+   workingData.presetFrequencies[7][5] = 14285000;
 
-   workingData.presetFrequencies[8][0] = 14030000L;
-   workingData.presetFrequencies[8][1] = 14060000L;
-   workingData.presetFrequencies[8][2] = 14100000L;
-   workingData.presetFrequencies[8][3] = 14200000L;
-   workingData.presetFrequencies[8][4] = 14250000L;
-   workingData.presetFrequencies[8][5] = 14285000L;
+   workingData.presetFrequencies[8][0] = 14030000;
+   workingData.presetFrequencies[8][1] = 14060000;
+   workingData.presetFrequencies[8][2] = 14100000;
+   workingData.presetFrequencies[8][3] = 14200000;
+   workingData.presetFrequencies[8][4] = 14250000;
+   workingData.presetFrequencies[8][5] = 14285000;
 
    workingData.bandLimitPositionCounts[0][0] = 0;
    workingData.bandLimitPositionCounts[0][1] = 0;
@@ -155,12 +155,12 @@ void Data::writeDefaultValues()
    workingData.bandEdges[4][1] = HIGHEND20M;
    workingData.bandEdges[5][0] = LOWEND17M;
    workingData.bandEdges[5][1] = HIGHEND17M;
-   workingData.bandEdges[5][0] = LOWEND15M;
-   workingData.bandEdges[5][1] = HIGHEND15M;
-   workingData.bandEdges[5][0] = LOWEND12M;
-   workingData.bandEdges[5][1] = HIGHEND12M;
-   workingData.bandEdges[5][0] = LOWEND10M;
-   workingData.bandEdges[5][1] = HIGHEND10M;
+   workingData.bandEdges[6][0] = LOWEND15M;
+   workingData.bandEdges[6][1] = HIGHEND15M;
+   workingData.bandEdges[7][0] = LOWEND12M;
+   workingData.bandEdges[7][1] = HIGHEND12M;
+   workingData.bandEdges[8][0] = LOWEND10M;
+   workingData.bandEdges[8][1] = HIGHEND10M;
 
    workingData.lastFreq[0] =  3550000;
    workingData.lastFreq[1] =  5357000;
@@ -174,13 +174,14 @@ void Data::writeDefaultValues()
 
    workingData.currentBand = 0;
    workingData.currentFrequency = 7150000;
-   workingData.initialized = 0x55555555;  // 0x55555555 means the workingData struct has been initialized.
+   workingData.initialized = 0x11111111;  // 0x55555555 means the workingData struct has been initialized.
    workingData.calibrated = 0x00000000;   // Set to something other than 0 if calibrated.
    workingData.hardware = 0x00000000;     // 0 means hardware not accepted. 0x55555555 is accepted hardware.
 
-   workingData.zero_offset = 1000;  // zero offset
-   workingData.backlash = 60;       // backlash
-   workingData.coarse_sweep = 20;   // coarse tune
-   workingData.accel = 2000;        // acceleration
-   workingData.speed = 500;         // speed
+   workingData.zero_offset = 99;  // zero offset 1000
+   workingData.backlash = 0;       // backlash  50
+   workingData.coarse_sweep = 0;   // coarse tune 20
+   workingData.accel = 0;        // acceleration 2000
+   workingData.speed = 0;         // speed 500
+   workingData.rotation = false;    // stepper motor rotation false
 }

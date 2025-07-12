@@ -121,21 +121,23 @@ void setup() {
   analogReadResolution(12);
 
   // Start the EEPROM and read the workingData struct into working memory.
-  EEPROM.begin(256);
+  EEPROM.begin(1024);
 
-  EEPROM.get(0, data.workingData);  // Read the workingData struct from EEPROM.
+////  EEPROM.get(0, data.workingData);
 
-  // Slopes can't be computed until the actual values are loaded from EEPROM.
-  data.computeSlopes();
+data.workingData.initialized = 0x00000000;
 
   //  Now examine the data in the buffer to see if the EEPROM should be initialized.
   //  There is a specific number written to the EEPROM when it is initialized.
-////  if (data.workingData.initialized != 0x55555555) {
+  if (data.workingData.initialized != 0x55555555) {
     data.writeDefaultValues();  //  Writes default values in to the dataStruct in the Data object.
     EEPROM.put(0, data.workingData);
     EEPROM.commit();
     EEPROM.get(0, data.workingData);  // Read the workingData struct from EEPROM.
-////  } else EEPROM.get(0, data.workingData);
+  } else EEPROM.get(0, data.workingData);  // Read the workingData struct from EEPROM.
+
+  // Slopes can't be computed until the actual values are loaded from EEPROM.
+  data.computeSlopes();
 
   enterbutton.initialize();
   exitbutton.initialize();
