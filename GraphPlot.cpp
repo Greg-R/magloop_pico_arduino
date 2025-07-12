@@ -59,8 +59,8 @@ void GraphPlot::GraphAxis(int whichBandOption) // al modified 9-8-19
 
 //    freqCount = static_cast<float>(data.LOWEND40M) / 1000000.0;
 //    freqEnd = static_cast<float>(data.HIGHEND40M) / 1000000.0;
-   freqCount = data.workingData.bandEdges[data.user_bands[whichBandOption]][0];
-   freqEnd   = data.workingData.bandEdges[data.user_bands[whichBandOption]][1];
+   freqCount = static_cast<float>(data.workingData.bandEdges[data.user_bands[whichBandOption]][0]) / 1000000.0;
+   freqEnd   = static_cast<float>(data.workingData.bandEdges[data.user_bands[whichBandOption]][1]) / 1000000.0;
 
   switch (whichBandOption)
   {
