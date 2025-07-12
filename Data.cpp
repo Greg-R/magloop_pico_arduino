@@ -173,15 +173,15 @@ void Data::writeDefaultValues()
    workingData.lastFreq[8] = 28500000;         
 
    workingData.currentBand = 0;
-   workingData.currentFrequency = 7150000;
-   workingData.initialized = 0x11111111;  // 0x55555555 means the workingData struct has been initialized.
+   workingData.currentFrequency = 0;
+   workingData.initialized = 0x55555555;  // 0x55555555 means the workingData struct has been initialized.
    workingData.calibrated = 0x00000000;   // Set to something other than 0 if calibrated.
    workingData.hardware = 0x00000000;     // 0 means hardware not accepted. 0x55555555 is accepted hardware.
 
-   workingData.zero_offset = 99;  // zero offset 1000
-   workingData.backlash = 0;       // backlash  50
-   workingData.coarse_sweep = 0;   // coarse tune 20
-   workingData.accel = 0;        // acceleration 2000
-   workingData.speed = 0;         // speed 500
+   workingData.zero_offset = 480;  // zero offset 1000
+   workingData.backlash = 50;       // backlash  50
+   workingData.coarse_sweep = 5;   // coarse tune 20
+   workingData.accel = 2000;        // acceleration 2000
+   workingData.speed = 500;         // speed 500
    workingData.rotation = false;    // stepper motor rotation false
 }

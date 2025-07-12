@@ -77,7 +77,7 @@ StepperManagement stepper = StepperManagement(tft, dds, swr, data, tmcstepper, A
 Hardware testArray = Hardware(tft, dds, swr, enterbutton, autotunebutton, exitbutton, data, stepper, tmcstepper);
 
 // The TuneInputs object.  This object handles user interaction via the buttons and encoders.
-TuneInputs tuneInputs = TuneInputs(tft, data, dds, enterbutton, autotunebutton, exitbutton, swr, tmcstepper);
+TuneInputs tuneInputs = TuneInputs(tft, data, dds, enterbutton, autotunebutton, exitbutton, swr, tmcstepper, stepper);
 
 // The DisplayManagement object.  This object has many important methods.  Because it has to touch everything it is large.
 DisplayManagement display = DisplayManagement(tft, dds, swr, stepper, tmcstepper, data, enterbutton,
@@ -121,11 +121,10 @@ void setup() {
   analogReadResolution(12);
 
   // Start the EEPROM and read the workingData struct into working memory.
-  EEPROM.begin(1024);
+  EEPROM.begin(4096);
 
-////  EEPROM.get(0, data.workingData);
-
-data.workingData.initialized = 0x00000000;
+  // Read the EEPROM.
+  EEPROM.get(0, data.workingData);
 
   //  Now examine the data in the buffer to see if the EEPROM should be initialized.
   //  There is a specific number written to the EEPROM when it is initialized.
@@ -133,8 +132,9 @@ data.workingData.initialized = 0x00000000;
     data.writeDefaultValues();  //  Writes default values in to the dataStruct in the Data object.
     EEPROM.put(0, data.workingData);
     EEPROM.commit();
-    EEPROM.get(0, data.workingData);  // Read the workingData struct from EEPROM.
+    EEPROM.get(0, data.workingData);       // Read the workingData struct from EEPROM.
   } else EEPROM.get(0, data.workingData);  // Read the workingData struct from EEPROM.
+
 
   // Slopes can't be computed until the actual values are loaded from EEPROM.
   data.computeSlopes();

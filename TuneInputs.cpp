@@ -31,9 +31,9 @@
 #include "TuneInputs.h"
 
 TuneInputs::TuneInputs(Adafruit_ILI9341 &tft, Data &data, DDS& dds, Button &enterbutton,  
-                       Button &autotunebutton, Button &exitbutton, SWR& swr, TmcStepper &tmcstepper)
+                       Button &autotunebutton, Button &exitbutton, SWR& swr, TmcStepper &tmcstepper, StepperManagement &stepper)
                      :  DisplayUtility(tft, dds, swr, data, tmcstepper), tft(tft), data(data), // data(data), Does order of initialization make a difference in this case?
-                       enterbutton(enterbutton), autotunebutton(autotunebutton), exitbutton(exitbutton), swr(swr), tmcstepper(tmcstepper)
+                       enterbutton(enterbutton), autotunebutton(autotunebutton), exitbutton(exitbutton), swr(swr), tmcstepper(tmcstepper), stepper(stepper)
 {
 
 }
@@ -171,6 +171,10 @@ void TuneInputs::SelectParameter()
         lastexitbutton = true;  // Prevents exit button from skipping a level.
         EEPROM.put(0, data.workingData);  // Save parameters to EEPROM.
         EEPROM.commit();
+        // If first time through, the stepper must be initialized.
+        tmcstepper.initialize(data.workingData.rotation);  // Initialize TMC stepper using user selection rotation.
+        // Initialize the stepper object.
+        stepper.initialize();
         //  Need to refresh graphics, because they were changed by ChangeFrequency!
         state = State::state0; // Refresh the graphics.
       }
