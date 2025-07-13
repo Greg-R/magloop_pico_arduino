@@ -198,7 +198,7 @@ void DisplayManagement::frequencyMenuOption()
       whichBandOption = SelectBand(data.bands, 130, 80); // state1
 
       // If SelectBand returns 4, this means the menu was exited without selecting a band.  Move to the top level menu Freq.
-      if (whichBandOption == 4)
+      if (whichBandOption == 5)
       {
         state = State::state0;
         break;
@@ -548,7 +548,7 @@ int DisplayManagement::SelectBand(std::vector<std::string> bands, int coorX, int
       break; // Exit the state machine if there was a false to true transition, return selected index.
     enterLastPushed = enterbutton.pushed;
     if (exitbutton.pushed & not exitLastPushed)
-      return index = 4; // 4 is a signal that the menu was exited from without making a selection.
+      return index = 5; // 4 is a signal that the menu was exited from without making a selection.
     exitLastPushed = exitbutton.pushed;
   } // end while
 
@@ -732,15 +732,18 @@ void DisplayManagement::DoFirstCalibrate()
           // Write the position to the upper frequency.  This is to prevent AutoTune from using the default of zero.
           if (j == 0)
             data.workingData.bandLimitPositionCounts[data.user_bands[i]][1] = SWRMinPosition;
-          tft.setCursor(0, 90 + whichLine * TEXTLINESPACING);
+
+          tft.setFont();  // Use the very small native font.
+          tft.setTextSize(1);
+  //        tft.setCursor(0, 90 + whichLine * 10);
           if (dds.currentFrequency < 10000000)
           {
-            tft.print(" ");
-          }
+            tft.setCursor(7, 90 + whichLine * 10);
+          } else tft.setCursor(0, 90 + whichLine * 10);
           tft.print(dds.currentFrequency);
-          tft.setCursor(150, 90 + whichLine * TEXTLINESPACING);
+          tft.setCursor(150, 90 + whichLine * 10);
           tft.print(minSWRAuto);
-          tft.setCursor(230, 90 + whichLine * TEXTLINESPACING);
+          tft.setCursor(230, 90 + whichLine * 10);
           tft.print(SWRMinPosition);
           whichLine++; // Ready for next line of output
           break;       // Leave the while loop. This sends control to next edge

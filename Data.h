@@ -34,7 +34,7 @@
 #include <vector>
 // #include "Configuration.h"
 
-#define NUMBER_BANDS 4
+#define NUMBER_BANDS 5
 
 //  This class is intended to manage various frequency and position related constants and variables.
 //  The single object will be referenced by most or maybe all of the other class objects.
@@ -73,11 +73,11 @@ uint32_t TEN_METERS = 8;
 // The default selections are for 40M, 30M, and 20M.
 // Un-comment more lines if NUMBER_BANDS is greater than 3.
 
-uint32_t band0 = SIXTY_METERS;
-uint32_t band1 = FORTY_METERS;
-uint32_t band2 = THIRTY_METERS;
-uint32_t band3 = TWENTY_METERS;
-// const uint32_t band4 =
+uint32_t band0 = EIGHTY_METERS;
+uint32_t band1 = SIXTY_METERS;
+uint32_t band2 = FORTY_METERS;
+uint32_t band3 = THIRTY_METERS;
+uint32_t band4 = TWENTY_METERS;
 
 #if NUMBER_BANDS == 3
 std::vector<uint32_t> user_bands = {band0, band1, band2};
@@ -91,17 +91,17 @@ std::vector<uint32_t> user_bands = {band0, band1, band2, band3, band4};
   // Bands:
 
   std::vector<std::string> bands = {"80M", "60M", "40M", "30M", "20M", "17M", "12M", "10M"};
-  static const uint32_t LOWEND80M  = 3500000;
-  static const uint32_t HIGHEND80M = 4000000;
+  static const uint32_t LOWEND80M  = 7000000;
+  static const uint32_t HIGHEND80M = 7300000;
 
-  static const uint32_t LOWEND60M  = 5330000;
-  static const uint32_t HIGHEND60M = 5410000; 
+  static const uint32_t LOWEND60M  = 8000000;
+  static const uint32_t HIGHEND60M = 8300000; 
 
-  static const uint32_t LOWEND40M  = 7000000;
-  static const uint32_t HIGHEND40M = 7300000;
+  static const uint32_t LOWEND40M  = 10100000;
+  static const uint32_t HIGHEND40M = 10150000;
 
-  static const uint32_t LOWEND30M  = 10100000;
-  static const uint32_t HIGHEND30M = 10150000;
+  static const uint32_t LOWEND30M  = 12000000;
+  static const uint32_t HIGHEND30M = 12300000;
 
   static const uint32_t LOWEND20M  = 14000000;
   static const uint32_t HIGHEND20M = 14350000;
