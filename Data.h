@@ -34,7 +34,7 @@
 #include <vector>
 // #include "Configuration.h"
 
-#define NUMBER_BANDS 3
+#define NUMBER_BANDS 4
 
 //  This class is intended to manage various frequency and position related constants and variables.
 //  The single object will be referenced by most or maybe all of the other class objects.
@@ -73,10 +73,10 @@ uint32_t TEN_METERS = 8;
 // The default selections are for 40M, 30M, and 20M.
 // Un-comment more lines if NUMBER_BANDS is greater than 3.
 
-uint32_t band0 = FORTY_METERS;
-uint32_t band1 = THIRTY_METERS;
-uint32_t band2 = TWENTY_METERS;
-//uint32_t band3 = TWELVE_METERS;
+uint32_t band0 = SIXTY_METERS;
+uint32_t band1 = FORTY_METERS;
+uint32_t band2 = THIRTY_METERS;
+uint32_t band3 = TWENTY_METERS;
 // const uint32_t band4 =
 
 #if NUMBER_BANDS == 3
